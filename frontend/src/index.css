@@ -1,123 +1,96 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 /* === BASE STYLES === */
 html, body {
-  @apply min-h-screen bg-neutral-dark text-neutral-light font-futuristic;
+    @apply min-h-screen bg-white text-neutral-dark; /* Fondo blanco y texto en color oscuro */
+    font-family: 'Poppins', sans-serif; /* Aplica la fuente Poppins */
 }
 
 /* Scrollbar futurista */
 ::-webkit-scrollbar {
-  width: 10px;
-  background: #2D2D2D;
+    width: 10px;
+    background: #FCD94B; /* Color de fondo de la scrollbar */
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #D4AF37, #00F0FF 80%);
-  border-radius: 8px;
-  border: 2px solid #1A1A1A;
+    background: linear-gradient(135deg, #FFD439, #F4A300 80%); /* Color del thumb */
+    border-radius: 8px;
+    border: 2px solid #1A1A1A;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #F4C460, #8A2BE2 80%);
+    background: linear-gradient(135deg, #F4C460, #8A2BE2 80%);
 }
 
 /* Selection color */
 ::selection {
-  background: #D4AF37;
-  color: #1A1A1A;
+    background: #FFD439; /* Color de selección */
+    color: #1A1A1A; /* Color del texto seleccionado */
 }
 
 /* ==== FUTURISTIC BUTTON === */
 .btn-futuristic {
-  @apply px-8 py-3 rounded-full font-bold bg-primary-gold hover:bg-primary-goldLight text-neutral-dark shadow-gold transition-all duration-300 uppercase tracking-wide;
-  letter-spacing: 0.08em;
+    @apply px-8 py-3 rounded-full font-bold bg-[#FFD439] hover:bg-[#F4A300] text-white transition-all duration-300 uppercase tracking-wide; /* Colores de botones */
+    letter-spacing: 0.08em;
 }
 
 /* === CARD GLASSMORPHISM === */
 .glass-effect {
-  background: rgba(40,40,40,0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(212,175,55,0.09);
-  box-shadow: 0 2px 32px 0 rgba(0,0,0,0.18), 0 0px 0px 0 rgba(212,175,55,0.1);
-  border-radius: 1.5rem;
+    background: rgba(40,40,40,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,175,55,0.09);
+    box-shadow: 0 2px 32px 0 rgba(0,0,0,0.18), 0 0px 0px 0 rgba(212,175,55,0.1);
+    border-radius: 1.5rem;
 }
 
 /* === GRADIENT TEXT === */
 .gradient-text-gold {
-  background-image: linear-gradient(90deg, #D4AF37, #F4C460 60%, #B8860B);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.gradient-text-blue {
-  background-image: linear-gradient(90deg, #00F0FF, #0080FF 80%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.gradient-text-purple {
-  background-image: linear-gradient(90deg, #8A2BE2, #A855F7 60%, #6B1A9A);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+    background-image: linear-gradient(90deg, #FFD439, #F4A300 60%, #B8860B);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
 /* === ANIMACIONES CUSTOM === */
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
-  animation: fadeIn 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-
-@keyframes glowGold {
-  0%, 100% { box-shadow: 0 0 20px #D4AF37; }
-  50% { box-shadow: 0 0 40px #F4C460; }
-}
-.animate-glow-gold {
-  animation: glowGold 2s infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px);}
-}
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+    animation: fadeIn 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
 }
 
 /* === INPUTS Y FORMULARIOS === */
 .input-futuristic {
-  @apply w-full px-4 py-3 rounded-lg bg-neutral-gray border-2 border-primary-gold text-neutral-light text-center focus:outline-none focus:ring-2 focus:ring-primary-goldLight transition-shadow;
-  box-shadow: 0 2px 12px 0 rgba(212,175,55,0.07);
+    @apply w-full px-4 py-3 rounded-lg bg-neutral-gray border-2 border-[#FFD439] text-neutral-dark text-center focus:outline-none focus:ring-2 focus:ring-[#F4A300] transition-shadow; /* Colores de inputs */
+    box-shadow: 0 2px 12px 0 rgba(212,175,55,0.07);
 }
 
 /* === BARRA DE NAVEGACION === */
 .navbar-blur {
-  background: rgba(26,26,26,0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(212,175,55,0.07);
+    background: rgba(26,26,26,0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(212,175,55,0.07);
 }
 
 /* === TITULOS === */
 .heading-futuristic {
-  @apply font-display text-4xl md:text-6xl mb-4 gradient-text-gold drop-shadow-lg tracking-tight;
+    @apply font-display text-4xl md:text-6xl mb-4 gradient-text-gold drop-shadow-lg tracking-tight text-[#256B3E]; /* Títulos en verde oscuro */
 }
 
 /* === TARJETAS DESTACADAS === */
 .card-feature {
-  @apply glass-effect p-6 rounded-2xl shadow-lg border-l-4 border-primary-gold transition-transform transform hover:scale-105;
+    @apply glass-effect p-6 rounded-2xl shadow-lg border-l-4 border-[#FFD439] transition-transform transform hover:scale-105; /* Colores de tarjetas */
 }
 
 /* === FOOTER === */
 .footer-futuristic {
-  @apply py-6 text-center text-sm text-gray-400 bg-neutral-grayLight border-t border-primary-gold/20;
-  letter-spacing: 0.05em;
+    @apply py-6 text-center text-sm text-gray-400 bg-neutral-grayLight border-t border-[#FFD439]/20; /* Colores de footer */
+    letter-spacing: 0.05em;
 }
-
-

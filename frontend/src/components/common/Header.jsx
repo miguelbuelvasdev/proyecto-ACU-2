@@ -25,12 +25,12 @@ const Header = ({ user = null, isAuthenticated = false }) => {
     setDropdownOpen(false);
   }, [location]);
 
-  const publicNavLinks = [
-    { href: '/', label: 'Inicio', icon: <Home className="w-4 h-4" /> },
-    { href: '/about', label: 'Acerca de', icon: <BookOpen className="w-4 h-4" /> },
-    { href: '/features', label: 'Características', icon: <Award className="w-4 h-4" /> },
-    { href: '/contact', label: 'Contacto', icon: <Users className="w-4 h-4" /> }
-  ];
+  // const publicNavLinks = [
+  //   { href: '/', label: 'Inicio', icon: <Home className="w-4 h-4" /> },
+  //   { href: '/about', label: 'Acerca de', icon: <BookOpen className="w-4 h-4" /> },
+  //   { href: '/features', label: 'Características', icon: <Award className="w-4 h-4" /> },
+  //   { href: '/contact', label: 'Contacto', icon: <Users className="w-4 h-4" /> }
+  // ];
 
   const authenticatedNavLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: <BarChart3 className="w-4 h-4" /> },

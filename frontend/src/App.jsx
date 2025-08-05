@@ -7,14 +7,15 @@ import { AuthProvider } from './context/AuthContext';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import Navbar from './components/common/Navbar';
 
-// Pages - Importa solo las que existen
+// Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import ResourcesPage from './pages/ResourcesPage'; 
-
+import Exams from './pages/ExamsPage'; 
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -43,10 +44,18 @@ const PublicRoute = ({ children, isAuthenticated }) => {
 };
 
 // Layout wrapper component
-const Layout = ({ children, showHeader = true, showFooter = true, isAuthenticated, user }) => {
+const Layout = ({ 
+  children, 
+  showHeader = true, 
+  showFooter = true, 
+  showNavbar = false, // Nueva prop
+  isAuthenticated, 
+  user 
+}) => {
   return (
     <>
       {showHeader && <Header isAuthenticated={isAuthenticated} user={user} />}
+      {showNavbar && <Navbar />}
       <main className="min-h-screen">
         {children}
       </main>
@@ -58,16 +67,15 @@ const Layout = ({ children, showHeader = true, showFooter = true, isAuthenticate
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser ] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Simulate checking authentication status
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem('authToken');
         if (token) {
           setIsAuthenticated(true);
-          setUser ({
+          setUser({
             name: 'Usuario Demo',
             email: 'usuario@example.com'
           });
@@ -91,11 +99,11 @@ function App() {
       <AuthProvider>
         <AnimatePresence mode="wait">
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes sin Navbar */}
             <Route 
               path="/" 
               element={
-                <Layout showHeader={false} showFooter={false} isAuthenticated={isAuthenticated} user={user}>
+                <Layout showHeader={false} showFooter={false}>
                   <LandingPage />
                 </Layout>
               } 
@@ -104,44 +112,73 @@ function App() {
             <Route 
               path="/login" 
               element={
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Layout showHeader={false} showFooter={false}>
-                    <Login />
-                  </Layout>
-                </PublicRoute>
+                <Layout showHeader={false} showFooter={false}>
+                  <Login />
+                </Layout>
               } 
             />
             
             <Route 
               path="/register" 
               element={
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Layout showHeader={false} showFooter={false}>
-                    <Register />
-                  </Layout>
-                </PublicRoute>
+                <Layout showHeader={false} showFooter={false}>
+                  <Register />
+                </Layout>
               } 
             />
 
+            {/* Rutas con Navbar */}
             <Route 
               path="/home" 
               element={
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Layout showHeader={false} showFooter={false}>
-                    <HomePage />
-                  </Layout>
-                </PublicRoute>
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <HomePage />
+                </Layout>
               } 
             />
 
             <Route 
               path="/resources" 
               element={
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Layout showHeader={false} showFooter={false}>
-                    <ResourcesPage />
-                  </Layout>
-                </PublicRoute>
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ResourcesPage />
+                </Layout>
+              } 
+            />
+
+            <Route 
+              path="/exams" 
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <Exams/>
+                </Layout>
+              } 
+            />
+
+            <Route 
+              path="/dashboard" 
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ComingSoon pageName="Dashboard" />
+                </Layout>
+              } 
+            />
+
+            <Route 
+              path="/profile" 
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ComingSoon pageName="Perfil" />
+                </Layout>
+              } 
+            />
+
+            <Route 
+              path="/settings" 
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ComingSoon pageName="Configuración" />
+                </Layout>
               } 
             />
             
@@ -153,29 +190,6 @@ function App() {
                 </Layout>
               } 
             />
-
-            {/* Protected Routes */}
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <Layout isAuthenticated={isAuthenticated} user={user}>
-                    <ComingSoon pageName="Dashboard" />
-                  </Layout>
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* <Route 
-              path="/resources" 
-              element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <Layout isAuthenticated={isAuthenticated} user={user} showHeader={false} showFooter={true}>
-                    <ResourcesPage />
-                  </Layout>
-                </ProtectedRoute>
-              } 
-            /> */}
 
             {/* 404 Route */}
             <Route 

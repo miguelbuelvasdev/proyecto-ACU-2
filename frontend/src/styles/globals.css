@@ -1,0 +1,25 @@
+body {
+    font-family: 'Poppins', sans-serif; /* Cambia a la fuente elegida */
+    background-color: #FFFFFF; /* Color de fondo */
+    color: #256B3E; /* Color de texto principal */
+}
+
+h1, h2, h3 {
+    color: #F4A300; /* Color de encabezados */
+}
+
+.button {
+    background-color: #FFD439; /* Color de botones */
+    color: #FFFFFF; /* Color de texto en botones */
+    border-radius: 8px; /* Bordes redondeados */
+}
+
+.icon {
+    fill: #FCD94B; /* Color de íconos */
+}
+
+/* Estilos para ilustraciones */
+.illustration {
+    max-width: 100%;
+    height: auto;
+}

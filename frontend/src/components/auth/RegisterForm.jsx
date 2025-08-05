@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
 import { 
   User, Mail, Lock, Phone, MapPin, Store, 
   ArrowRight, ArrowLeft, Check, AlertCircle,
-  ChefHat, Users, Calendar, Eye, EyeOff
+  ChefHat, Users, Calendar, Eye, EyeOff, Leaf
 } from 'lucide-react';
 
-const RegisterForm = ({ currentStep, setCurrentStep }) => {
-  const navigate = useNavigate();
+const RegisterPage = () => {
+  const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -16,20 +15,15 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
   
   // Form data state
   const [formData, setFormData] = useState({
-    // Step 1 - Restaurant Info
     restaurantName: '',
     restaurantType: '',
     capacity: '',
     foundedYear: '',
-    
-    // Step 2 - Contact Info
     ownerName: '',
     email: '',
     phone: '',
     address: '',
     city: '',
-    
-    // Step 3 - Account Setup
     password: '',
     confirmPassword: '',
     acceptTerms: false,
@@ -113,8 +107,8 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Success - redirect to dashboard or login
-      navigate('/dashboard');
+      // Success
+      alert('¡Registro exitoso! Bienvenido a EcoAceite');
     } catch (error) {
       setErrors({ submit: 'Error al registrar. Por favor intenta de nuevo.' });
     } finally {
@@ -130,22 +124,22 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-6"
           >
-            <h3 className="text-2xl font-bold gradient-text-gold mb-6">Información del Restaurante</h3>
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Información del Restaurante</h3>
             
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Nombre del Restaurante
               </label>
               <div className="relative">
-                <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="text"
                   name="restaurantName"
                   value={formData.restaurantName}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="Ej: La Cocina de María"
                 />
               </div>
@@ -158,16 +152,16 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Tipo de Restaurante
               </label>
               <div className="relative">
-                <ChefHat className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <ChefHat className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <select
                   name="restaurantType"
                   value={formData.restaurantType}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10 appearance-none"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E] appearance-none"
                 >
                   <option value="">Selecciona un tipo</option>
                   {restaurantTypes.map(type => (
@@ -185,17 +179,17 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-neutral-light/80 mb-2">
-                  Capacidad (personas)
+                <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
+                  Capacidad
                 </label>
                 <div className="relative">
-                  <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                  <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                   <input
                     type="number"
                     name="capacity"
                     value={formData.capacity}
                     onChange={handleInputChange}
-                    className="input-futuristic pl-10"
+                    className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                     placeholder="Ej: 50"
                     min="1"
                   />
@@ -209,17 +203,17 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+                <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                   Año de Fundación
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                   <input
                     type="number"
                     name="foundedYear"
                     value={formData.foundedYear}
                     onChange={handleInputChange}
-                    className="input-futuristic pl-10"
+                    className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                     placeholder={new Date().getFullYear()}
                     min="1900"
                     max={new Date().getFullYear()}
@@ -242,22 +236,22 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-6"
           >
-            <h3 className="text-2xl font-bold gradient-text-gold mb-6">Información de Contacto</h3>
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Información de Contacto</h3>
             
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Nombre del Propietario/Gerente
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="text"
                   name="ownerName"
                   value={formData.ownerName}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="Nombre completo"
                 />
               </div>
@@ -270,17 +264,17 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Correo Electrónico
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="correo@ejemplo.com"
                 />
               </div>
@@ -293,18 +287,18 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Teléfono
               </label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
-                  placeholder="+1 (555) 123-4567"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
+                  placeholder="+57 300 123 4567"
                 />
               </div>
               {errors.phone && (
@@ -316,17 +310,17 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Dirección
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="Calle Principal #123"
                 />
               </div>
@@ -339,18 +333,18 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Ciudad
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type="text"
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10"
-                  placeholder="Ciudad, Estado/Provincia"
+                  className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
+                  placeholder="Barranquilla, Atlántico"
                 />
               </div>
               {errors.city && (
@@ -369,28 +363,28 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
+            className="space-y-6"
           >
-            <h3 className="text-2xl font-bold gradient-text-gold mb-6">Configuración de Cuenta</h3>
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Configuración de Cuenta</h3>
             
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10 pr-12"
+                  className="w-full pl-10 pr-12 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="Mínimo 8 caracteres"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-light/60 hover:text-primary-gold transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#256B3E]/60 hover:text-[#F4A300] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -404,23 +398,23 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-neutral-light/80 mb-2">
+              <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Confirmar Contraseña
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-gold/60" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="input-futuristic pl-10 pr-12"
+                  className="w-full pl-10 pr-12 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E]"
                   placeholder="Repetir contraseña"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-light/60 hover:text-primary-gold transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#256B3E]/60 hover:text-[#F4A300] transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -433,24 +427,24 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
               )}
             </div>
 
-            <div className="space-y-3 mt-6">
-              <label className="flex items-center space-x-3 cursor-pointer">
+            <div className="space-y-4 mt-6">
+              <label className="flex items-start space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
                   name="acceptTerms"
                   checked={formData.acceptTerms}
                   onChange={handleInputChange}
-                  className="w-5 h-5 rounded border-2 border-primary-gold bg-neutral-dark checked:bg-primary-gold focus:ring-2 focus:ring-primary-goldLight"
+                  className="w-5 h-5 mt-0.5 rounded border-2 border-[#F4A300] bg-white checked:bg-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 text-white"
                 />
-                <span className="text-sm text-neutral-light/80">
+                <span className="text-sm text-[#256B3E]/80 leading-relaxed">
                   Acepto los{' '}
-                  <Link to="/terms" className="text-primary-gold hover:text-primary-goldLight">
+                  <a href="#" className="text-[#F4A300] hover:text-[#FFD439] underline">
                     términos y condiciones
-                  </Link>
+                  </a>
                   {' '}y la{' '}
-                  <Link to="/privacy" className="text-primary-gold hover:text-primary-goldLight">
+                  <a href="#" className="text-[#F4A300] hover:text-[#FFD439] underline">
                     política de privacidad
-                  </Link>
+                  </a>
                 </span>
               </label>
               {errors.acceptTerms && (
@@ -460,146 +454,215 @@ const RegisterForm = ({ currentStep, setCurrentStep }) => {
                 </p>
               )}
 
-              <label className="flex items-center space-x-3 cursor-pointer">
+              <label className="flex items-start space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
                   name="subscribeNewsletter"
                   checked={formData.subscribeNewsletter}
                   onChange={handleInputChange}
-                  className="w-5 h-5 rounded border-2 border-primary-gold bg-neutral-dark checked:bg-primary-gold focus:ring-2 focus:ring-primary-goldLight"
+                  className="w-5 h-5 mt-0.5 rounded border-2 border-[#F4A300] bg-white checked:bg-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 text-white"
                 />
-                <span className="text-sm text-neutral-light/80">
-                  Quiero recibir tips de sostenibilidad y novedades
+                <span className="text-sm text-[#256B3E]/80 leading-relaxed">
+                  Quiero recibir tips de sostenibilidad y novedades del sector gastronómico
                 </span>
               </label>
             </div>
-
-            {errors.submit && (
-              <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 flex items-center">
-                <AlertCircle className="w-5 h-5 text-red-500 mr-2" />
-                <span className="text-red-500">{errors.submit}</span>
-              </div>
-            )}
           </motion.div>
         );
     }
   };
 
+  const steps = [
+    { number: 1, title: "Restaurante", description: "Información básica" },
+    { number: 2, title: "Contacto", description: "Datos de contacto" },
+    { number: 3, title: "Cuenta", description: "Configuración final" }
+  ];
+
   return (
-    <div className="glass-effect rounded-3xl p-8 shadow-2xl">
-      {/* Progress Indicator */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          {[1, 2, 3].map((step) => (
-            <div
-              key={step}
-              className={`flex items-center ${step < 3 ? 'flex-1' : ''}`}
-            >
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ 
-                  scale: currentStep >= step ? 1.1 : 1,
-                  backgroundColor: currentStep >= step ? '#D4AF37' : '#4A4A4A'
-                }}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-neutral-dark font-bold
-                  ${currentStep >= step ? 'shadow-glow-gold' : 'border-2 border-neutral-light/20'}`}
-              >
-                {currentStep > step ? <Check className="w-5 h-5" /> : step}
-              </motion.div>
-              
-              {step < 3 && (
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: currentStep > step ? 1 : 0 }}
-                  className="flex-1 h-0.5 bg-primary-gold mx-2 origin-left"
-                  transition={{ duration: 0.3 }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        
-        <div className="flex justify-between text-sm">
-          <span className={currentStep >= 1 ? 'text-primary-gold' : 'text-neutral-light/60'}>
-            Restaurante
-          </span>
-          <span className={currentStep >= 2 ? 'text-primary-gold' : 'text-neutral-light/60'}>
-            Contacto
-          </span>
-          <span className={currentStep >= 3 ? 'text-primary-gold' : 'text-neutral-light/60'}>
-            Cuenta
-          </span>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-64 h-64 bg-[#FFD439]/10 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-[#256B3E]/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
       </div>
 
-      {/* Form Steps */}
-      <form onSubmit={handleSubmit}>
-        <AnimatePresence mode="wait">
-          {renderStep()}
-        </AnimatePresence>
+      <div className="relative w-full max-w-4xl">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          {/* Left Side - Branding */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center lg:text-left"
+          >
+            <div className="flex items-center justify-center lg:justify-start space-x-3 mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-2xl shadow-lg flex items-center justify-center">
+                <Leaf className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-[#256B3E]">EcoAceite</h1>
+                <p className="text-sm text-[#256B3E]/70 font-medium tracking-wider">OVA EDUCATIVO</p>
+              </div>
+            </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between mt-8">
-          {currentStep > 1 && (
-            <motion.button
-              type="button"
-              onClick={handlePrevious}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center space-x-2 px-6 py-3 rounded-full border-2 border-neutral-light/30 text-neutral-light hover:border-primary-gold hover:text-primary-gold transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Anterior</span>
-            </motion.button>
-          )}
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-[#256B3E] leading-tight">
+              Únete a la <span className="text-[#F4A300]">Revolución</span><br />
+              del ACU Sostenible
+            </h2>
 
-          {currentStep < 3 ? (
-            <motion.button
-              type="button"
-              onClick={handleNext}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-futuristic flex items-center space-x-2 ml-auto"
-            >
-              <span>Siguiente</span>
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-          ) : (
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-futuristic flex items-center space-x-2 ml-auto"
-            >
-              {isLoading ? (
-                <>
-                  <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-neutral-dark"></span>
-                  <span>Registrando...</span>
-                </>
-              ) : (
-                <>
-                  <span>Completar Registro</span>
-                  <Check className="w-5 h-5" />
-                </>
+            <p className="text-lg text-[#256B3E]/80 mb-8 leading-relaxed">
+              Capacita a tu equipo en el manejo responsable del Aceite de Cocina Usado 
+              y contribuye a un futuro más sostenible.
+            </p>
+
+            {/* Benefits */}
+            <div className="space-y-4">
+              {[
+                "Certificación oficial reconocida",
+                "Contenido multimedia interactivo",
+                "Protocolos de seguridad actualizados",
+                "Soporte técnico especializado"
+              ].map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="flex items-center space-x-3"
+                >
+                  <div className="w-6 h-6 bg-[#F4A300] rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-[#256B3E]/80">{benefit}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right Side - Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-200"
+          >
+            {/* Progress Steps */}
+            <div className="flex justify-between mb-8">
+              {steps.map((step, index) => (
+                <div key={step.number} className="flex items-center">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                    currentStep >= step.number 
+                      ? 'bg-[#F4A300] text-white shadow-lg' 
+                      : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    {currentStep > step.number ? <Check className="w-5 h-5" /> : step.number}
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div className={`w-16 h-1 mx-2 transition-all duration-300 ${
+                      currentStep > step.number ? 'bg-[#F4A300]' : 'bg-gray-200'
+                    }`}></div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Current Step Info */}
+            <div className="text-center mb-8">
+              <h3 className="text-lg font-semibold text-[#256B3E]">
+                {steps[currentStep - 1].title}
+              </h3>
+              <p className="text-sm text-[#256B3E]/60">
+                {steps[currentStep - 1].description}
+              </p>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit}>
+              <AnimatePresence mode="wait">
+                {renderStep()}
+              </AnimatePresence>
+
+              {/* Navigation Buttons */}
+              <div className="flex justify-between mt-8">
+                {currentStep > 1 && (
+                  <motion.button
+                    type="button"
+                    onClick={handlePrevious}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-600 rounded-xl font-medium hover:border-[#256B3E] hover:text-[#256B3E] transition-all duration-300"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    Anterior
+                  </motion.button>
+                )}
+
+                {currentStep < 3 ? (
+                  <motion.button
+                    type="button"
+                    onClick={handleNext}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 ml-auto"
+                  >
+                    Siguiente
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    type="submit"
+                    disabled={isLoading}
+                    whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                    whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                    className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#256B3E] to-[#1F5D34] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-300 ml-auto disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Registrando...
+                      </>
+                    ) : (
+                      <>
+                        Crear Cuenta
+                        <Check className="w-4 h-4" />
+                      </>
+                    )}
+                  </motion.button>
+                )}
+              </div>
+
+              {/* Error Message */}
+              {errors.submit && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl"
+                >
+                  <p className="text-red-600 text-sm flex items-center">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    {errors.submit}
+                  </p>
+                </motion.div>
               )}
-            </motion.button>
-          )}
-        </div>
-      </form>
+            </form>
 
-      {/* Login Link */}
-      <div className="text-center mt-6 pt-6 border-t border-neutral-light/10">
-        <p className="text-neutral-light/60">
-          ¿Ya tienes una cuenta?{' '}
-          <Link to="/login" className="text-primary-gold hover:text-primary-goldLight font-medium">
-            Inicia sesión aquí
-          </Link>
-        </p>
+            {/* Login Link */}
+            <div className="mt-8 text-center pt-6 border-t border-gray-200">
+              <p className="text-sm text-[#256B3E]/60">
+                ¿Ya tienes una cuenta?{' '}
+                <a 
+                  href="/login" 
+                  className="text-[#F4A300] hover:text-[#FFD439] font-medium transition-colors"
+                >
+                  Inicia sesión aquí
+                </a>
+              </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default RegisterForm;
-
+export default RegisterPage;

@@ -2,74 +2,52 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Home,
   BookOpen,
   FileQuestion,
-  BarChart3,
-  User,
-  Settings,
-  LogOut,
-  Bell,
   Award,
   Clock,
   CheckCircle,
-  AlertCircle,
   TrendingUp,
   Calendar,
   ChevronRight,
-  Menu,
-  X,
   Droplets,
   Leaf,
   Target,
-  Users,
-  HelpCircle
+  Bell,
+  Shield
 } from 'lucide-react';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [activeNav, setActiveNav] = useState('inicio');
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [notifications, setNotifications] = useState(3);
-
-  // Mock user data
-  const userData = {
-    name: "María González",
-    email: "maria@lacocinademaria.com",
-    restaurant: "La Cocina de María",
-    avatar: null,
-    role: "Propietario"
-  };
 
   // Mock data para exámenes y estadísticas
   const pendingExams = [
     {
       id: 1,
-      title: "Evaluación Módulo 3: Reciclaje Avanzado",
-      dueDate: "2024-11-15",
-      duration: "45 min",
+      title: "Cuestionario Final de Certificación",
+      dueDate: "2025-08-20",
+      duration: "60 min",
       attempts: 0,
       maxAttempts: 3,
       difficulty: "Intermedio"
     },
     {
       id: 2,
-      title: "Quiz: Normativas Ambientales",
-      dueDate: "2024-11-20",
-      duration: "20 min",
-      attempts: 1,
-      maxAttempts: 2,
+      title: "Cuestionario Inicial de Conocimientos",
+      dueDate: "2025-08-20",
+      duration: "60 min",
+      attempts: 0,
+      maxAttempts: 3,
       difficulty: "Básico"
     }
   ];
 
   const stats = {
-    coursesCompleted: 2,
-    coursesTotal: 5,
-    averageScore: 85,
-    certificationsEarned: 1,
-    oilRecycled: 156
+    coursesCompleted: 0,
+    coursesTotal: 0,
+    averageScore: 0,
+    certificationsEarned: 0,
+    oilRecycled: 0
   };
 
   const recentResources = [
@@ -93,302 +71,117 @@ const HomePage = () => {
     }
   ];
 
-  const navItems = [
-    { id: 'inicio', label: 'Inicio', icon: Home, path: '/home' },
-    { id: 'recursos', label: 'Recursos', icon: BookOpen, path: '/resources' },
-    { id: 'cuestionarios', label: 'Cuestionarios', icon: FileQuestion, path: '/exams' },
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/dashboard' }
-  ];
-
-  const profileMenuItems = [
-    { label: 'Mi Perfil', icon: User, path: '/profile' },
-    { label: 'Mi Restaurante', icon: Users, path: '/restaurant' },
-    { label: 'Configuración', icon: Settings, path: '/settings' },
-    { label: 'Ayuda', icon: HelpCircle, path: '/help' },
-    { label: 'Cerrar Sesión', icon: LogOut, action: 'logout' }
-  ];
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest('.profile-menu-container')) {
-        setShowProfileMenu(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    navigate('/');
-  };
-
-  const handleNavigation = (path) => {
-    navigate(path);
-    setMobileMenuOpen(false);
-  };
-
-  const handleProfileAction = (item) => {
-    if (item.action === 'logout') {
-      handleLogout();
-    } else {
-      navigate(item.path);
-    }
-    setShowProfileMenu(false);
+  // Mock user data
+  const userData = {
+    name: "María González",
+    email: "maria@lacocinademaria.com",
+    restaurant: "La Cocina de María",
+    role: "Propietario"
   };
 
   return (
-    <div className="min-h-screen bg-neutral-dark">
+    <div className="min-h-screen bg-white text-[#256B3E] overflow-x-hidden font-['Inter',sans-serif]">
       {/* Background Effects */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute top-20 -left-40 w-96 h-96 bg-accent-purple/10 rounded-full filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-40 -right-40 w-96 h-96 bg-primary-gold/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-64 h-64 bg-gradient-to-r from-[#FFD439]/10 to-[#F4A300]/10 rounded-full filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-gradient-to-l from-[#256B3E]/10 to-[#FCD94B]/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-br from-[#F4A300]/5 to-[#FFD439]/5 rounded-full filter blur-2xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Navigation Header */}
-      <motion.nav
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="navbar-blur fixed w-full z-40 px-4 sm:px-6 py-4"
-      >
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <div className="flex items-center space-x-8">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center space-x-3 cursor-pointer"
-                onClick={() => navigate('/home')}
-              >
-                <div className="w-10 h-10 bg-gradient-gold rounded-full animate-pulse"></div>
-                <span className="text-2xl font-bold gradient-text-gold">EcoAceite</span>
-              </motion.div>
-
-              {/* Desktop Navigation */}
-              <div className="hidden lg:flex items-center space-x-1">
-                {navItems.map((item) => (
-                  <motion.button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveNav(item.id);
-                      handleNavigation(item.path);
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200
-                      ${activeNav === item.id 
-                        ? 'bg-primary-gold/20 text-primary-gold' 
-                        : 'text-neutral-light/70 hover:text-neutral-light hover:bg-neutral-gray/30'
-                      }`}
-                  >
-                    <item.icon className="w-5 h-5" />
-                    <span className="font-medium">{item.label}</span>
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Side - Notifications & Profile */}
-            <div className="flex items-center space-x-4">
-              {/* Notifications */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative p-2 rounded-lg hover:bg-neutral-gray/30 transition-colors"
-              >
-                <Bell className="w-6 h-6 text-neutral-light/70" />
-                {notifications > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-gold rounded-full text-xs 
-                                 text-neutral-dark font-bold flex items-center justify-center">
-                    {notifications}
-                  </span>
-                )}
-              </motion.button>
-
-              {/* Profile Menu */}
-              <div className="profile-menu-container relative">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowProfileMenu(!showProfileMenu);
-                  }}
-                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-gray/30 transition-colors"
-                >
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary-gold to-accent-purple rounded-full 
-                                flex items-center justify-center text-neutral-dark font-bold">
-                    {userData.name.charAt(0)}
-                  </div>
-                  <div className="hidden md:block text-left">
-                    <p className="text-sm font-medium text-neutral-light">{userData.name}</p>
-                    <p className="text-xs text-neutral-light/60">{userData.role}</p>
-                  </div>
-                </motion.button>
-
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {showProfileMenu && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-64 glass-effect rounded-xl shadow-2xl overflow-hidden"
-                    >
-                      {/* User Info Header */}
-                      <div className="p-4 bg-neutral-gray/50 border-b border-neutral-light/10">
-                        <p className="font-medium text-neutral-light">{userData.name}</p>
-                        <p className="text-sm text-neutral-light/60">{userData.email}</p>
-                        <p className="text-xs text-primary-gold mt-1">{userData.restaurant}</p>
-                      </div>
-
-                      {/* Menu Items */}
-                      <div className="py-2">
-                        {profileMenuItems.map((item, index) => (
-                          <motion.button
-                            key={index}
-                            onClick={() => handleProfileAction(item)}
-                            whileHover={{ x: 5 }}
-                            className="w-full px-4 py-3 flex items-center space-x-3 text-neutral-light/80 
-                                     hover:text-neutral-light hover:bg-neutral-gray/30 transition-all duration-200"
-                          >
-                            <item.icon className="w-5 h-5" />
-                            <span className="text-sm font-medium">{item.label}</span>
-                          </motion.button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Mobile Menu Button */}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-neutral-gray/30 transition-colors"
-              >
-                {mobileMenuOpen ? (
-                  <X className="w-6 h-6 text-neutral-light" />
-                ) : (
-                  <Menu className="w-6 h-6 text-neutral-light" />
-                )}
-              </motion.button>
-            </div>
-          </div>
-
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden mt-4"
-              >
-                <div className="glass-effect rounded-2xl p-4">
-                  {navItems.map((item) => (
-                    <motion.button
-                      key={item.id}
-                      onClick={() => {
-                        setActiveNav(item.id);
-                        handleNavigation(item.path);
-                      }}
-                      whileHover={{ x: 5 }}
-                      className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-neutral-light/80 
-                               hover:text-neutral-light hover:bg-neutral-gray/30 transition-all duration-200"
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-medium">{item.label}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.nav>
-
       {/* Main Content */}
-      <div className="relative z-10 pt-24 pb-12">
-        <div className="container mx-auto px-4">
+      <div className="relative z-10 pt-12 pb-12">
+        <div className="container mx-auto px-4 sm:px-6">
           {/* Welcome Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-12 text-center lg:text-left"
           >
-            <h1 className="text-4xl lg:text-5xl font-bold mb-2">
-              <span className="gradient-text-gold">Bienvenido,</span>
-              <span className="text-neutral-light ml-2">{userData.name}</span>
+            {/* Educational Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-gray-100 to-gray-50 border border-gray-200 rounded-full px-4 py-2 mb-6"
+            >
+              <BookOpen className="w-4 h-4 text-[#F4A300]" />
+              <span className="text-sm font-medium text-[#256B3E]">Panel de Control</span>
+              <div className="w-2 h-2 bg-[#FFD439] rounded-full animate-pulse"></div>
+            </motion.div>
+
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+              <span className="block text-[#256B3E] mb-2">Bienvenido,</span>
+              <span className="block bg-gradient-to-r from-[#F4A300] via-[#FFD439] to-[#256B3E] bg-clip-text text-transparent">
+                {userData.name}
+              </span>
             </h1>
-            <p className="text-xl text-neutral-light/70">
-              Continúa tu viaje hacia la sostenibilidad gastronómica
+            <p className="text-xl text-[#256B3E]/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Continúa tu viaje hacia la sostenibilidad gastronómica y el manejo responsable del ACU
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Column - Main Content */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-8">
               {/* Pending Exams */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="glass-effect rounded-2xl p-6"
+                className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg shadow-black/5"
               >
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold gradient-text-gold flex items-center gap-2">
-                    <FileQuestion className="w-7 h-7" />
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold text-[#256B3E] flex items-center gap-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-xl flex items-center justify-center">
+                      <FileQuestion className="w-6 h-6 text-white" />
+                    </div>
                     Exámenes Pendientes
                   </h2>
-                  <span className="text-sm text-neutral-light/60">
+                  <span className="text-sm text-[#256B3E]/60 bg-gray-100 px-3 py-1 rounded-full font-medium">
                     {pendingExams.length} por completar
                   </span>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {pendingExams.map((exam) => (
                     <motion.div
                       key={exam.id}
                       whileHover={{ scale: 1.02 }}
-                      className="bg-neutral-gray/50 rounded-xl p-5 border border-neutral-light/10 
-                               hover:border-primary-gold/50 transition-all duration-300 cursor-pointer"
+                      className="bg-gray-50/80 rounded-xl p-6 border border-gray-200 
+                               hover:border-[#F4A300]/50 hover:shadow-lg hover:shadow-[#F4A300]/10 
+                               transition-all duration-300 cursor-pointer group"
                       onClick={() => navigate(`/exam/${exam.id}`)}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-neutral-light mb-2">
+                          <h3 className="text-lg font-semibold text-[#256B3E] mb-3 group-hover:text-[#256B3E]/90">
                             {exam.title}
                           </h3>
-                          <div className="flex flex-wrap items-center gap-4 text-sm">
-                            <span className="flex items-center gap-1 text-neutral-light/60">
+                          <div className="flex flex-wrap items-center gap-4 text-sm mb-3">
+                            <span className="flex items-center gap-2 text-[#256B3E]/60">
                               <Calendar className="w-4 h-4" />
                               Vence: {new Date(exam.dueDate).toLocaleDateString('es-ES')}
                             </span>
-                            <span className="flex items-center gap-1 text-neutral-light/60">
+                            <span className="flex items-center gap-2 text-[#256B3E]/60">
                               <Clock className="w-4 h-4" />
                               {exam.duration}
                             </span>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium
-                              ${exam.difficulty === 'Básico' ? 'bg-status-success/20 text-status-success' :
-                                exam.difficulty === 'Intermedio' ? 'bg-status-warning/20 text-status-warning' :
-                                'bg-status-error/20 text-status-error'}`}>
+                            <span className={`px-3 py-1 rounded-full text-xs font-medium
+                              ${exam.difficulty === 'Básico' ? 'bg-green-100 text-green-700 border border-green-200' :
+                                exam.difficulty === 'Intermedio' ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' :
+                                'bg-red-100 text-red-700 border border-red-200'}`}>
                               {exam.difficulty}
                             </span>
                           </div>
-                          <div className="mt-2">
-                            <span className="text-xs text-neutral-light/50">
+                          <div>
+                            <span className="text-xs text-[#256B3E]/50 bg-white px-2 py-1 rounded-md border">
                               Intentos: {exam.attempts}/{exam.maxAttempts}
                             </span>
                           </div>
                         </div>
                         <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="btn-futuristic py-2 px-6 text-sm"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-6 py-3 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow-lg shadow-[#FFD439]/25 hover:shadow-xl hover:shadow-[#FFD439]/40 transition-all duration-300"
                         >
                           Iniciar
                         </motion.button>
@@ -398,9 +191,11 @@ const HomePage = () => {
                 </div>
 
                 {pendingExams.length === 0 && (
-                  <div className="text-center py-8">
-                    <CheckCircle className="w-16 h-16 text-status-success mx-auto mb-4" />
-                    <p className="text-neutral-light/60">¡No tienes exámenes pendientes!</p>
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-green-200">
+                      <CheckCircle className="w-10 h-10 text-green-600" />
+                    </div>
+                    <p className="text-[#256B3E]/60 font-medium">¡No tienes exámenes pendientes!</p>
                   </div>
                 )}
               </motion.div>
@@ -410,53 +205,55 @@ const HomePage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="glass-effect rounded-2xl p-6"
+                className="bg-white border border-gray-200 rounded-2xl p-8 shadow-lg shadow-black/5"
               >
-                <h2 className="text-2xl font-bold gradient-text-gold mb-6 flex items-center gap-2">
-                  <TrendingUp className="w-7 h-7" />
+                <h2 className="text-2xl font-bold text-[#256B3E] mb-8 flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#256B3E] to-[#1F5D34] rounded-xl flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
                   Tu Progreso
                 </h2>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {/* Course Progress */}
-                  <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-neutral-light/80">Módulos Completados</span>
-                      <span className="text-lg font-bold text-primary-gold">
+                  <div className="bg-gray-50/80 rounded-xl p-6 border border-gray-200">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[#256B3E] font-medium">Módulos Completados</span>
+                      <span className="text-2xl font-bold bg-gradient-to-r from-[#F4A300] to-[#256B3E] bg-clip-text text-transparent">
                         {stats.coursesCompleted}/{stats.coursesTotal}
                       </span>
                     </div>
-                    <div className="w-full bg-neutral-dark rounded-full h-3 overflow-hidden">
+                    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden border border-gray-300">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${(stats.coursesCompleted / stats.coursesTotal) * 100}%` }}
                         transition={{ duration: 1, delay: 0.5 }}
-                        className="h-full bg-gradient-to-r from-primary-gold to-accent-purple rounded-full"
+                        className="h-full bg-gradient-to-r from-[#FFD439] to-[#F4A300] rounded-full shadow-sm"
                       />
                     </div>
                   </div>
 
                   {/* Stats Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                    <div className="text-center p-4 bg-neutral-gray/30 rounded-xl">
-                      <Award className="w-8 h-8 text-primary-gold mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-neutral-light">{stats.certificationsEarned}</p>
-                      <p className="text-xs text-neutral-light/60">Certificaciones</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="text-center p-6 bg-gray-50/80 rounded-xl border border-gray-200 hover:border-[#F4A300]/50 transition-all duration-300 group">
+                      <Award className="w-10 h-10 text-[#F4A300] mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                      <p className="text-2xl font-bold text-[#256B3E] mb-1">{stats.certificationsEarned}</p>
+                      <p className="text-xs text-[#256B3E]/60 font-medium">Certificaciones</p>
                     </div>
-                    <div className="text-center p-4 bg-neutral-gray/30 rounded-xl">
-                      <Target className="w-8 h-8 text-accent-blue mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-neutral-light">{stats.averageScore}%</p>
-                      <p className="text-xs text-neutral-light/60">Promedio</p>
+                    <div className="text-center p-6 bg-gray-50/80 rounded-xl border border-gray-200 hover:border-[#F4A300]/50 transition-all duration-300 group">
+                      <Target className="w-10 h-10 text-[#256B3E] mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                      <p className="text-2xl font-bold text-[#256B3E] mb-1">{stats.averageScore}%</p>
+                      <p className="text-xs text-[#256B3E]/60 font-medium">Promedio</p>
                     </div>
-                    <div className="text-center p-4 bg-neutral-gray/30 rounded-xl">
-                      <Droplets className="w-8 h-8 text-accent-purple mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-neutral-light">{stats.oilRecycled}L</p>
-                      <p className="text-xs text-neutral-light/60">Aceite Reciclado</p>
+                    <div className="text-center p-6 bg-gray-50/80 rounded-xl border border-gray-200 hover:border-[#F4A300]/50 transition-all duration-300 group">
+                      <Droplets className="w-10 h-10 text-[#F4A300] mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                      <p className="text-2xl font-bold text-[#256B3E] mb-1">{stats.oilRecycled}L</p>
+                      <p className="text-xs text-[#256B3E]/60 font-medium">Aceite Reciclado</p>
                     </div>
-                    <div className="text-center p-4 bg-neutral-gray/30 rounded-xl">
-                      <Leaf className="w-8 h-8 text-status-success mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-neutral-light">A+</p>
-                      <p className="text-xs text-neutral-light/60">Eco-Score</p>
+                    <div className="text-center p-6 bg-gray-50/80 rounded-xl border border-gray-200 hover:border-[#F4A300]/50 transition-all duration-300 group">
+                      <Leaf className="w-10 h-10 text-green-600 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                      <p className="text-2xl font-bold text-[#256B3E] mb-1">A+</p>
+                      <p className="text-xs text-[#256B3E]/60 font-medium">Eco-Score</p>
                     </div>
                   </div>
                 </div>
@@ -464,38 +261,43 @@ const HomePage = () => {
             </div>
 
             {/* Right Column - Sidebar */}
-            <div className="space-y-6">
+            <div className="space-y-8">
               {/* Quick Actions */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="glass-effect rounded-2xl p-6"
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg shadow-black/5"
               >
-                <h3 className="text-xl font-bold gradient-text-gold mb-4">Acciones Rápidas</h3>
-                <div className="space-y-3">
+                <h3 className="text-xl font-bold text-[#256B3E] mb-6 flex items-center gap-2">
+                  <div className="w-2 h-8 bg-gradient-to-b from-[#FFD439] to-[#F4A300] rounded-full"></div>
+                  Acciones Rápidas
+                </h3>
+                <div className="space-y-4">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate('/ova')}
-                    className="w-full p-4 rounded-xl bg-primary-gold/20 hover:bg-primary-gold/30 
-                             text-primary-gold font-medium transition-all duration-300 
+                    onClick={() => navigate('/resources')}
+                    className="w-full p-4 rounded-xl bg-gradient-to-r from-[#FFD439]/20 to-[#F4A300]/20 
+                             hover:from-[#FFD439]/30 hover:to-[#F4A300]/30 border border-[#F4A300]/20
+                             text-[#256B3E] font-medium transition-all duration-300 
                              flex items-center justify-between group"
                   >
                     <span>Continuar Aprendiendo</span>
-                    <BookOpen className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <BookOpen className="w-5 h-5 text-[#F4A300] group-hover:translate-x-1 transition-transform" />
                   </motion.button>
 
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate('/certificate')}
-                    className="w-full p-4 rounded-xl bg-accent-purple/20 hover:bg-accent-purple/30 
-                             text-accent-purple font-medium transition-all duration-300 
+                    className="w-full p-4 rounded-xl bg-gradient-to-r from-[#256B3E]/20 to-[#1F5D34]/20 
+                             hover:from-[#256B3E]/30 hover:to-[#1F5D34]/30 border border-[#256B3E]/20
+                             text-[#256B3E] font-medium transition-all duration-300 
                              flex items-center justify-between group"
                   >
                     <span>Mis Certificados</span>
-                    <Award className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <Award className="w-5 h-5 text-[#256B3E] group-hover:translate-x-1 transition-transform" />
                   </motion.button>
                 </div>
               </motion.div>
@@ -505,44 +307,50 @@ const HomePage = () => {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="glass-effect rounded-2xl p-6"
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg shadow-black/5"
               >
-                <h3 className="text-xl font-bold gradient-text-gold mb-4">
+                <h3 className="text-xl font-bold text-[#256B3E] mb-6 flex items-center gap-2">
+                  <div className="w-2 h-8 bg-gradient-to-b from-[#FFD439] to-[#F4A300] rounded-full"></div>
                   Recursos Recientes
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {recentResources.map((resource) => (
                     <motion.div
                       key={resource.id}
-                      whileHover={{ x: 5 }}
-                      className="flex items-center justify-between p-3 rounded-lg 
-                               bg-neutral-gray/30 hover:bg-neutral-gray/50 
-                               transition-all duration-200 cursor-pointer"
+                      whileHover={{ x: 5, scale: 1.02 }}
+                      className="flex items-center justify-between p-4 rounded-xl 
+                               bg-gray-50/80 hover:bg-gray-100/80 border border-gray-200
+                               hover:border-[#F4A300]/50 transition-all duration-200 cursor-pointer group"
                     >
                       <div className="flex items-center gap-3">
-                        <BookOpen className="w-5 h-5 text-primary-gold" />
+                        <div className="w-10 h-10 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-lg flex items-center justify-center">
+                          <BookOpen className="w-5 h-5 text-white" />
+                        </div>
                         <div>
-                          <p className="text-sm font-medium text-neutral-light">
+                          <p className="text-sm font-medium text-[#256B3E] group-hover:text-[#256B3E]/90">
                             {resource.title}
                           </p>
-                          <p className="text-xs text-neutral-light/60">{resource.type}</p>
+                          <p className="text-xs text-[#256B3E]/60">{resource.type}</p>
                         </div>
                       </div>
                       {resource.new && (
-                        <span className="px-2 py-1 bg-primary-gold/20 text-primary-gold 
-                                       text-xs font-medium rounded-full">
+                        <span className="px-2 py-1 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white 
+                                       text-xs font-medium rounded-full shadow-sm">
                           Nuevo
                         </span>
                       )}
                     </motion.div>
                   ))}
-                  <button 
+                  <motion.button 
                     onClick={() => navigate('/resources')}
-                    className="w-full text-center text-sm text-primary-gold hover:text-primary-goldLight 
-                             font-medium mt-2 flex items-center justify-center gap-1"
+                    whileHover={{ scale: 1.02 }}
+                    className="w-full text-center text-sm text-[#F4A300] hover:text-[#256B3E] 
+                             font-medium mt-4 flex items-center justify-center gap-2 p-2 rounded-lg
+                             hover:bg-gray-50 transition-all duration-200"
                   >
-                    Ver todos los recursos <ChevronRight className="w-4 h-4" />
-                  </button>
+                    Ver todos los recursos 
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.button>
                 </div>
               </motion.div>
 
@@ -551,21 +359,110 @@ const HomePage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="glass-effect rounded-2xl p-6 bg-gradient-to-br from-accent-blue/10 to-accent-purple/10"
+                className="relative bg-gradient-to-br from-[#256B3E] to-[#1F5D34] rounded-2xl p-6 text-white overflow-hidden shadow-lg shadow-[#256B3E]/25"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <Bell className="w-8 h-8 text-primary-gold" />
-                  <h3 className="text-lg font-bold text-neutral-light">Notificaciones</h3>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-6 right-6 w-16 h-16 bg-white rounded-full"></div>
+                  <div className="absolute bottom-6 left-6 w-12 h-12 bg-[#FFD439] rounded-full"></div>
                 </div>
-                <p className="text-sm text-neutral-light/70 mb-4">
-                  Tienes {notifications} notificaciones nuevas
-                </p>
-                <button className="text-sm text-primary-gold hover:text-primary-goldLight font-medium">
-                  Ver todas →
-                </button>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                      <Bell className="w-6 h-6 text-[#FFD439]" />
+                    </div>
+                    <h3 className="text-lg font-bold">Notificaciones</h3>
+                  </div>
+                  <p className="text-sm text-white/90 mb-6 leading-relaxed">
+                    Tienes 3 notificaciones nuevas relacionadas con tus cursos y certificaciones
+                  </p>
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="text-sm text-[#FFD439] hover:text-white font-medium bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-all duration-200"
+                  >
+                    Ver todas las notificaciones →
+                  </motion.button>
+                </div>
+              </motion.div>
+
+              {/* Environmental Impact Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+                className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 shadow-lg shadow-green-500/5"
+              >
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/25">
+                    <Leaf className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-green-800 mb-2">Impacto Ambiental</h3>
+                  <p className="text-sm text-green-700/80 mb-4">
+                    Tu contribución al medio ambiente este mes
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-green-700">ACU Gestionado</span>
+                      <span className="text-sm font-bold text-green-800">{stats.oilRecycled}L</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-green-700">CO₂ Evitado</span>
+                      <span className="text-sm font-bold text-green-800">0kg</span>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </div>
           </div>
+
+          {/* Bottom CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="mt-16"
+          >
+            <div className="relative bg-gradient-to-br from-[#256B3E] to-[#1F5D34] rounded-3xl p-12 text-center text-white overflow-hidden shadow-xl shadow-[#256B3E]/25">
+              {/* Background Effects */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-6 right-6 w-32 h-32 bg-white rounded-full"></div>
+                <div className="absolute bottom-6 left-6 w-24 h-24 bg-[#FFD439] rounded-full"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#F4A300] rounded-full"></div>
+              </div>
+              
+              <div className="relative z-10">
+                <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Shield className="w-10 h-10 text-[#FFD439]" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  ¡Sigue Aprendiendo Sobre ACU!
+                </h2>
+                <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+                  Continúa desarrollando tus habilidades en el manejo seguro y responsable del Aceite de Cocina Usado
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <motion.button
+                    onClick={() => navigate('/resources')}
+                    whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255, 212, 57, 0.4)" }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-[#256B3E] rounded-2xl font-bold text-lg shadow-xl shadow-[#FFD439]/25 hover:shadow-2xl hover:shadow-[#FFD439]/40 transition-all duration-300"
+                  >
+                    Explorar Módulos
+                  </motion.button>
+                  <motion.button
+                    onClick={() => navigate('/dashboard')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-8 py-4 border-2 border-white/20 text-white hover:bg-white/10 rounded-2xl font-bold text-lg transition-all duration-300"
+                  >
+                    Ver Mi Progreso
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>
