@@ -15,7 +15,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import ResourcesPage from './pages/ResourcesPage'; 
-import Exams from './pages/ExamsPage'; 
+import Exams from './pages/ExamsPage';
+import Dashboard from './pages/Dashboard' 
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -159,7 +160,7 @@ function App() {
               path="/dashboard" 
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <ComingSoon pageName="Dashboard" />
+                  <Dashboard />
                 </Layout>
               } 
             />

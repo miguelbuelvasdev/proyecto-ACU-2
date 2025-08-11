@@ -242,7 +242,7 @@ const RegisterPage = () => {
             
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
-                Nombre del Propietario/Gerente
+                Nombre del cargo
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />

@@ -125,8 +125,12 @@ const ExamsPage = () => {
 
   const handleStartExam = (exam) => {
     if (exam.status === 'available') {
-      // Navegar a la página del examen específico
-      navigate(`/exam/${exam.id}`);
+      // Navegación específica según el tipo de examen
+      if (exam.type === 'inicial') {
+        navigate('/initial-exam');
+      } else if (exam.type === 'final') {
+        navigate('/final-exam');
+      }
     }
   };
 
@@ -394,4 +398,3 @@ const ExamsPage = () => {
 };
 
 export default ExamsPage;
-

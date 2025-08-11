@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Recycle, BarChart3, GraduationCap, Leaf, ArrowRight, Users, Award, Sparkles, Menu, X, BookOpen, Shield, Target, TrendingUp, AlertTriangle, Thermometer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from 'react-icons/fa';
+import logoOVA from '../assets/logoOVA.svg';
+import marimar from '../assets/marimar.jpg';
 
 
 const LandingPage = () => {
@@ -91,16 +93,13 @@ const LandingPage = () => {
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex items-center space-x-3"
+                className="flex items-center"
               >
-                <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-xl shadow-lg shadow-[#FFD439]/25"></div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-xl animate-pulse opacity-75"></div>
-                </div>
-                <div>
-                  <span className="text-2xl font-bold text-[#256B3E]">EcoAceite</span>
-                  <div className="text-xs text-[#256B3E]/70 font-medium tracking-wider">OVA EDUCATIVO</div>
-                </div>
+                <img 
+                  src={logoOVA} 
+                  alt="EcoAceite OVA Logo" 
+                  className="w-32 h-16 object-contain"
+                />
               </motion.div>
 
               {/* Desktop Menu */}
@@ -195,15 +194,11 @@ const LandingPage = () => {
                 <div className="w-2 h-2 bg-[#FFD439] rounded-full animate-pulse"></div>
               </motion.div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                <span className="block text-[#256B3E] mb-2">Bienvenido al Futuro</span>
-                <span className="block bg-gradient-to-r from-[#F4A300] via-[#FFD439] to-[#256B3E] bg-clip-text text-transparent">
-                  del Aprendizaje
-                </span>
-                <span className="block text-[#256B3E] text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-4">
-                  Gastronómico Sostenible
-                </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-[#256B3E]">
+                <span className="block mb-2">Transformando tu cocina,</span>
+                <span className="block">Renovando la ciudad</span>
               </h1>
+
 
               <p className="text-xl text-[#256B3E]/80 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Plataforma educativa interactiva para aprender el manejo seguro y responsable del 
@@ -246,7 +241,7 @@ const LandingPage = () => {
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/10">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#FFD439]/20 via-transparent to-[#256B3E]/20 z-10"></div>
                   <img 
-                    src="https://placehold.co/800x600" 
+                    src={marimar} 
                     alt="Chef profesional en cocina comercial aprendiendo sobre manejo seguro de aceite de cocina usado, con elementos educativos, termómetro para punto de humo, filtros de aceite, contenedores de almacenamiento, señalización de seguridad"
                     className="w-full h-full object-cover"
                   />
@@ -442,12 +437,12 @@ const LandingPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Logo y descripción */}
           <div className="col-span-1 md:col-span-2 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-xl"></div>
-              <div>
-                <span className="text-2xl font-bold text-[#256B3E]">EcoAceite</span>
-                <div className="text-xs text-[#256B3E]/70 font-medium tracking-wider">OBJETO VIRTUAL DE APRENDIZAJE</div>
-              </div>
+            <div className="flex items-center justify-center md:justify-start mb-6">
+              <img 
+                src={logoOVA} 
+                alt="EcoAceite OVA Logo" 
+                className="w-64 h-32 object-contain"
+              />
             </div>
             <p className="text-[#256B3E]/70 mb-6 max-w-md leading-relaxed mx-auto md:mx-0">
               Plataforma educativa para el manejo seguro y responsable del Aceite de Cocina Usado en cocinas comerciales.

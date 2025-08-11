@@ -14,6 +14,7 @@ import {
   LogOut,
   User
 } from 'lucide-react';
+import logoOVA from '../../assets/logoOVA.svg';
 
 const Navbar = () => {
   // Estado del menú móvil y perfil
@@ -74,12 +75,13 @@ const Navbar = () => {
           <div className="flex items-center">
             <button 
               onClick={() => handleNavigation('/home')}
-              className="flex items-center space-x-2 text-[#256B3E] hover:text-[#F4A300] transition-colors"
+              className="flex items-center text-[#256B3E] hover:text-[#F4A300] transition-colors"
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-lg flex items-center justify-center">
-                <Home className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-bold text-lg">EcoAceite</span>
+              <img 
+                src={logoOVA} 
+                alt="EcoAceite OVA Logo" 
+                className="w-24 h-12 object-contain"
+              />
             </button>
             
             <div className="hidden md:flex space-x-4 ml-10">
