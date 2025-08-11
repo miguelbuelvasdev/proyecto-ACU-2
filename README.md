@@ -318,3 +318,4 @@ El proyecto genera una build optimizada en la carpeta `dist/` con assets minific
 ## 📝 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para más detalles.
+
