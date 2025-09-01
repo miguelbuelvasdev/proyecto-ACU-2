@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  User, Mail, Lock, Phone, MapPin, Store, 
-  ArrowRight, ArrowLeft, Check, AlertCircle,
-  ChefHat, Users, Calendar, Eye, EyeOff, Leaf
-} from 'lucide-react';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  User,
+  Mail,
+  Lock,
+  Phone,
+  MapPin,
+  Store,
+  ArrowRight,
+  ArrowLeft,
+  Check,
+  AlertCircle,
+  ChefHat,
+  Users,
+  Calendar,
+  Eye,
+  EyeOff,
+  Leaf,
+} from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -12,112 +27,171 @@ const RegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
+  //Dependencias
+  const navigate = useNavigate();
+
   // Form data state
   const [formData, setFormData] = useState({
-    restaurantName: '',
-    restaurantType: '',
-    capacity: '',
-    foundedYear: '',
-    ownerName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    password: '',
-    confirmPassword: '',
+    restaurantName: "",
+    restaurantType: "",
+    capacity: "",
+    foundedYear: "",
+    ownerName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    password: "",
+    confirmPassword: "",
     acceptTerms: false,
-    subscribeNewsletter: false
+    subscribeNewsletter: false,
+    oilUsageEstimate: "10",
+    wasteScheduleMonday: "10:00",
+    wasteScheduleThursday: "14:00",
+    restaurantCategory: "",
   });
 
   const restaurantTypes = [
-    'Restaurante Tradicional',
-    'Comida Rápida',
-    'Cafetería',
-    'Food Truck',
-    'Catering',
-    'Hotel Restaurant',
-    'Bar & Grill',
-    'Otro'
+    "Restaurante Tradicional",
+    "Comida Rápida",
+    "Cafetería",
+    "Food Truck",
+    "Catering",
+    "Hotel Restaurant",
+    "Bar & Grill",
+    "Otro",
   ];
+
+  const restaurantTypeMap = {
+    "Restaurante Tradicional": "restaurant",
+    "Comida Rápida": "fast_food",
+    Cafetería: "cafeteria",
+    "Food Truck": "food_truck",
+    Catering: "catering",
+    "Hotel Restaurant": "hotel_restaurant",
+    "Bar & Grill": "bar_grill",
+    Otro: "other",
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
-    
+
     // Clear error for this field
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const validateStep = (step) => {
     const newErrors = {};
-    
-    switch(step) {
+
+    switch (step) {
       case 1:
-        if (!formData.restaurantName) newErrors.restaurantName = 'El nombre del restaurante es requerido';
-        if (!formData.restaurantType) newErrors.restaurantType = 'Selecciona un tipo de restaurante';
-        if (!formData.capacity) newErrors.capacity = 'La capacidad es requerida';
-        if (!formData.foundedYear) newErrors.foundedYear = 'El año de fundación es requerido';
+        if (!formData.restaurantName)
+          newErrors.restaurantName = "El nombre del restaurante es requerido";
+        if (!formData.restaurantType)
+          newErrors.restaurantType = "Selecciona un tipo de restaurante";
+        if (!formData.capacity)
+          newErrors.capacity = "La capacidad es requerida";
+        if (!formData.foundedYear)
+          newErrors.foundedYear = "El año de fundación es requerido";
         break;
-        
+
       case 2:
-        if (!formData.ownerName) newErrors.ownerName = 'El nombre del propietario es requerido';
-        if (!formData.email) newErrors.email = 'El email es requerido';
-        if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email inválido';
-        if (!formData.phone) newErrors.phone = 'El teléfono es requerido';
-        if (!formData.address) newErrors.address = 'La dirección es requerida';
-        if (!formData.city) newErrors.city = 'La ciudad es requerida';
+        if (!formData.ownerName)
+          newErrors.ownerName = "El nombre del propietario es requerido";
+        if (!formData.email) newErrors.email = "El email es requerido";
+        if (formData.email && !/\S+@\S+\.\S+/.test(formData.email))
+          newErrors.email = "Email inválido";
+        if (!formData.phone) newErrors.phone = "El teléfono es requerido";
+        if (!formData.address) newErrors.address = "La dirección es requerida";
+        if (!formData.city) newErrors.city = "La ciudad es requerida";
         break;
-        
+
       case 3:
-        if (!formData.password) newErrors.password = 'La contraseña es requerida';
-        if (formData.password && formData.password.length < 8) newErrors.password = 'La contraseña debe tener al menos 8 caracteres';
-        if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Las contraseñas no coinciden';
-        if (!formData.acceptTerms) newErrors.acceptTerms = 'Debes aceptar los términos y condiciones';
+        if (!formData.password)
+          newErrors.password = "La contraseña es requerida";
+        if (formData.password && formData.password.length < 8)
+          newErrors.password = "La contraseña debe tener al menos 8 caracteres";
+        if (formData.password !== formData.confirmPassword)
+          newErrors.confirmPassword = "Las contraseñas no coinciden";
+        if (!formData.acceptTerms)
+          newErrors.acceptTerms = "Debes aceptar los términos y condiciones";
         break;
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleNext = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 3));
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
     }
   };
 
   const handlePrevious = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateStep(3)) return;
-    
+
     setIsLoading(true);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Success
-      alert('¡Registro exitoso! Bienvenido a EcoAceite');
+      const API_BASE_URL =
+        import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
+      // Construye el payload para el registro
+      const payload = {
+        user: {
+          name: formData.ownerName,
+          email: formData.email,
+          password_hash: formData.password,
+          role: "restaurant_owner",
+          restaurant_name: formData.restaurantName,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          verified: true,
+        },
+        restaurant: {
+          // user_id lo asigna el backend
+          capacity: Number(formData.capacity),
+          founding_year: Number(formData.foundedYear),
+          oil_usage_estimate: Number(formData.oilUsageEstimate),
+          waste_schedule: {
+            monday: formData.wasteScheduleMonday,
+            friday: formData.wasteScheduleThursday,
+          },
+          category: formData.restaurantType || "restaurant",
+          certification_status: "pending",
+        },
+      };
+
+      await axios.post(`${API_BASE_URL}/auth/register`, payload);
+
+      alert("¡Registro exitoso! Bienvenido a EcoAceite");
+      navigate("/home");
     } catch (error) {
-      setErrors({ submit: 'Error al registrar. Por favor intenta de nuevo.' });
+      setErrors({
+        submit: `Error al registrar. Por favor intenta de nuevo.\n ${error.message}`,
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   const renderStep = () => {
-    switch(currentStep) {
+    switch (currentStep) {
       case 1:
         return (
           <motion.div
@@ -126,8 +200,10 @@ const RegisterPage = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Información del Restaurante</h3>
-            
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">
+              Información del Restaurante
+            </h3>
+
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Nombre del Restaurante
@@ -144,7 +220,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.restaurantName && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.restaurantName}
                 </p>
@@ -164,13 +240,15 @@ const RegisterPage = () => {
                   className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:border-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 transition-all duration-300 text-[#256B3E] appearance-none"
                 >
                   <option value="">Selecciona un tipo</option>
-                  {restaurantTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
+                  {restaurantTypes.map((type) => (
+                    <option key={type} value={restaurantTypeMap[type]}>
+                      {type}
+                    </option>
                   ))}
                 </select>
               </div>
               {errors.restaurantType && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.restaurantType}
                 </p>
@@ -195,7 +273,7 @@ const RegisterPage = () => {
                   />
                 </div>
                 {errors.capacity && (
-                  <p className="text-red-500 text-sm mt-1 flex items-center">
+                  <p className="flex items-center mt-1 text-sm text-red-500">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     {errors.capacity}
                   </p>
@@ -220,7 +298,7 @@ const RegisterPage = () => {
                   />
                 </div>
                 {errors.foundedYear && (
-                  <p className="text-red-500 text-sm mt-1 flex items-center">
+                  <p className="flex items-center mt-1 text-sm text-red-500">
                     <AlertCircle className="w-4 h-4 mr-1" />
                     {errors.foundedYear}
                   </p>
@@ -229,7 +307,7 @@ const RegisterPage = () => {
             </div>
           </motion.div>
         );
-        
+
       case 2:
         return (
           <motion.div
@@ -238,11 +316,13 @@ const RegisterPage = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Información de Contacto</h3>
-            
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">
+              Información de Contacto
+            </h3>
+
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
-                Nombre del cargo
+                Nombre
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
@@ -256,7 +336,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.ownerName && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.ownerName}
                 </p>
@@ -279,7 +359,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.email}
                 </p>
@@ -302,7 +382,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.phone && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.phone}
                 </p>
@@ -325,7 +405,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.address && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.address}
                 </p>
@@ -348,7 +428,7 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.city && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.city}
                 </p>
@@ -356,7 +436,7 @@ const RegisterPage = () => {
             </div>
           </motion.div>
         );
-        
+
       case 3:
         return (
           <motion.div
@@ -365,8 +445,10 @@ const RegisterPage = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">Configuración de Cuenta</h3>
-            
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">
+              Configuración de Cuenta
+            </h3>
+
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
                 Contraseña
@@ -386,11 +468,15 @@ const RegisterPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#256B3E]/60 hover:text-[#F4A300] transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.password}
                 </p>
@@ -416,18 +502,22 @@ const RegisterPage = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#256B3E]/60 hover:text-[#F4A300] transition-colors"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1 flex items-center">
+                <p className="flex items-center mt-1 text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.confirmPassword}
                 </p>
               )}
             </div>
 
-            <div className="space-y-4 mt-6">
+            <div className="mt-6 space-y-4">
               <label className="flex items-start space-x-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -437,18 +527,24 @@ const RegisterPage = () => {
                   className="w-5 h-5 mt-0.5 rounded border-2 border-[#F4A300] bg-white checked:bg-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 text-white"
                 />
                 <span className="text-sm text-[#256B3E]/80 leading-relaxed">
-                  Acepto los{' '}
-                  <a href="#" className="text-[#F4A300] hover:text-[#FFD439] underline">
+                  Acepto los{" "}
+                  <a
+                    href="#"
+                    className="text-[#F4A300] hover:text-[#FFD439] underline"
+                  >
                     términos y condiciones
-                  </a>
-                  {' '}y la{' '}
-                  <a href="#" className="text-[#F4A300] hover:text-[#FFD439] underline">
+                  </a>{" "}
+                  y la{" "}
+                  <a
+                    href="#"
+                    className="text-[#F4A300] hover:text-[#FFD439] underline"
+                  >
                     política de privacidad
                   </a>
                 </span>
               </label>
               {errors.acceptTerms && (
-                <p className="text-red-500 text-sm flex items-center">
+                <p className="flex items-center text-sm text-red-500">
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.acceptTerms}
                 </p>
@@ -463,7 +559,8 @@ const RegisterPage = () => {
                   className="w-5 h-5 mt-0.5 rounded border-2 border-[#F4A300] bg-white checked:bg-[#F4A300] focus:ring-2 focus:ring-[#F4A300]/20 text-white"
                 />
                 <span className="text-sm text-[#256B3E]/80 leading-relaxed">
-                  Quiero recibir tips de sostenibilidad y novedades del sector gastronómico
+                  Quiero recibir tips de sostenibilidad y novedades del sector
+                  gastronómico
                 </span>
               </label>
             </div>
@@ -475,11 +572,11 @@ const RegisterPage = () => {
   const steps = [
     { number: 1, title: "Restaurante", description: "Información básica" },
     { number: 2, title: "Contacto", description: "Datos de contacto" },
-    { number: 3, title: "Cuenta", description: "Configuración final" }
+    { number: 3, title: "Cuenta", description: "Configuración final" },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-32 w-64 h-64 bg-[#FFD439]/10 rounded-full filter blur-3xl animate-pulse"></div>
@@ -487,7 +584,7 @@ const RegisterPage = () => {
       </div>
 
       <div className="relative w-full max-w-4xl">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="grid items-center gap-8 lg:grid-cols-2">
           {/* Left Side - Branding */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -495,24 +592,27 @@ const RegisterPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left"
           >
-            <div className="flex items-center justify-center lg:justify-start space-x-3 mb-8">
+            <div className="flex items-center justify-center mb-8 space-x-3 lg:justify-start">
               <div className="w-16 h-16 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-2xl shadow-lg flex items-center justify-center">
                 <Leaf className="w-8 h-8 text-white" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-[#256B3E]">EcoAceite</h1>
-                <p className="text-sm text-[#256B3E]/70 font-medium tracking-wider">OVA EDUCATIVO</p>
+                <p className="text-sm text-[#256B3E]/70 font-medium tracking-wider">
+                  OVA EDUCATIVO
+                </p>
               </div>
             </div>
 
             <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-[#256B3E] leading-tight">
-              Únete a la <span className="text-[#F4A300]">Revolución</span><br />
+              Únete a la <span className="text-[#F4A300]">Revolución</span>
+              <br />
               del ACU Sostenible
             </h2>
 
             <p className="text-lg text-[#256B3E]/80 mb-8 leading-relaxed">
-              Capacita a tu equipo en el manejo responsable del Aceite de Cocina Usado 
-              y contribuye a un futuro más sostenible.
+              Capacita a tu equipo en el manejo responsable del Aceite de Cocina
+              Usado y contribuye a un futuro más sostenible.
             </p>
 
             {/* Benefits */}
@@ -521,7 +621,7 @@ const RegisterPage = () => {
                 "Certificación oficial reconocida",
                 "Contenido multimedia interactivo",
                 "Protocolos de seguridad actualizados",
-                "Soporte técnico especializado"
+                "Soporte técnico especializado",
               ].map((benefit, index) => (
                 <motion.div
                   key={index}
@@ -544,30 +644,40 @@ const RegisterPage = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-200"
+            className="p-8 bg-white border border-gray-200 shadow-2xl rounded-3xl"
           >
             {/* Progress Steps */}
             <div className="flex justify-between mb-8">
               {steps.map((step, index) => (
                 <div key={step.number} className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                    currentStep >= step.number 
-                      ? 'bg-[#F4A300] text-white shadow-lg' 
-                      : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {currentStep > step.number ? <Check className="w-5 h-5" /> : step.number}
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
+                      currentStep >= step.number
+                        ? "bg-[#F4A300] text-white shadow-lg"
+                        : "bg-gray-200 text-gray-500"
+                    }`}
+                  >
+                    {currentStep > step.number ? (
+                      <Check className="w-5 h-5" />
+                    ) : (
+                      step.number
+                    )}
                   </div>
                   {index < steps.length - 1 && (
-                    <div className={`w-16 h-1 mx-2 transition-all duration-300 ${
-                      currentStep > step.number ? 'bg-[#F4A300]' : 'bg-gray-200'
-                    }`}></div>
+                    <div
+                      className={`w-16 h-1 mx-2 transition-all duration-300 ${
+                        currentStep > step.number
+                          ? "bg-[#F4A300]"
+                          : "bg-gray-200"
+                      }`}
+                    ></div>
                   )}
                 </div>
               ))}
             </div>
 
             {/* Current Step Info */}
-            <div className="text-center mb-8">
+            <div className="mb-8 text-center">
               <h3 className="text-lg font-semibold text-[#256B3E]">
                 {steps[currentStep - 1].title}
               </h3>
@@ -578,9 +688,7 @@ const RegisterPage = () => {
 
             {/* Form */}
             <form onSubmit={handleSubmit}>
-              <AnimatePresence mode="wait">
-                {renderStep()}
-              </AnimatePresence>
+              <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
 
               {/* Navigation Buttons */}
               <div className="flex justify-between mt-8">
@@ -618,7 +726,7 @@ const RegisterPage = () => {
                   >
                     {isLoading ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 rounded-full border-white/30 border-t-white animate-spin"></div>
                         Registrando...
                       </>
                     ) : (
@@ -636,9 +744,9 @@ const RegisterPage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl"
+                  className="p-4 mt-4 border border-red-200 bg-red-50 rounded-xl"
                 >
-                  <p className="text-red-600 text-sm flex items-center">
+                  <p className="flex items-center text-sm text-red-600">
                     <AlertCircle className="w-4 h-4 mr-2" />
                     {errors.submit}
                   </p>
@@ -647,11 +755,11 @@ const RegisterPage = () => {
             </form>
 
             {/* Login Link */}
-            <div className="mt-8 text-center pt-6 border-t border-gray-200">
+            <div className="pt-6 mt-8 text-center border-t border-gray-200">
               <p className="text-sm text-[#256B3E]/60">
-                ¿Ya tienes una cuenta?{' '}
-                <a 
-                  href="/login" 
+                ¿Ya tienes una cuenta?{" "}
+                <a
+                  href="/login"
                   className="text-[#F4A300] hover:text-[#FFD439] font-medium transition-colors"
                 >
                   Inicia sesión aquí

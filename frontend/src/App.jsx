@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-import { AuthProvider } from './context/AuthContext';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { AuthProvider } from "./context/AuthContext";
 
 // Layout Components
-import Header from './components/common/Header';
-import Footer from './components/common/Footer';
-import LoadingSpinner from './components/common/LoadingSpinner';
-import Navbar from './components/common/Navbar';
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import LoadingSpinner from "./components/common/LoadingSpinner";
+import Navbar from "./components/common/Navbar";
 
 // Pages
-import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import HomePage from './pages/HomePage';
-import ResourcesPage from './pages/ResourcesPage'; 
-import Exams from './pages/ExamsPage';
-import Dashboard from './pages/Dashboard' 
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import HomePage from "./pages/HomePage";
+import ResourcesPage from "./pages/ResourcesPage";
+import Exams from "./pages/ExamsPage";
+import Dashboard from "./pages/Dashboard";
+import { DashboardBI } from "./pages/DashboardBI";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
-  <div className="min-h-screen bg-neutral-dark flex items-center justify-center">
+  <div className="flex items-center justify-center min-h-screen bg-neutral-dark">
     <div className="text-center">
-      <h1 className="text-4xl font-bold gradient-text-gold mb-4">{pageName}</h1>
+      <h1 className="mb-4 text-4xl font-bold gradient-text-gold">{pageName}</h1>
       <p className="text-neutral-light/70">Esta página está en construcción</p>
     </div>
   </div>
@@ -45,21 +51,19 @@ const PublicRoute = ({ children, isAuthenticated }) => {
 };
 
 // Layout wrapper component
-const Layout = ({ 
-  children, 
-  showHeader = true, 
-  showFooter = true, 
+const Layout = ({
+  children,
+  showHeader = true,
+  showFooter = true,
   showNavbar = false, // Nueva prop
-  isAuthenticated, 
-  user 
+  isAuthenticated,
+  user,
 }) => {
   return (
     <>
       {showHeader && <Header isAuthenticated={isAuthenticated} user={user} />}
       {showNavbar && <Navbar />}
-      <main className="min-h-screen">
-        {children}
-      </main>
+      <main className="min-h-screen">{children}</main>
       {showFooter && <Footer />}
     </>
   );
@@ -73,16 +77,16 @@ function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem("authToken");
         if (token) {
           setIsAuthenticated(true);
           setUser({
-            name: 'Usuario Demo',
-            email: 'usuario@example.com'
+            name: "Usuario Demo",
+            email: "usuario@example.com",
           });
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
+        console.error("Auth check failed:", error);
       } finally {
         setIsLoading(false);
       }
@@ -101,105 +105,114 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes>
             {/* Public Routes sin Navbar */}
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <Layout showHeader={false} showFooter={false}>
                   <LandingPage />
                 </Layout>
-              } 
+              }
             />
-            
-            <Route 
-              path="/login" 
+
+            <Route
+              path="/login"
               element={
                 <Layout showHeader={false} showFooter={false}>
                   <Login />
                 </Layout>
-              } 
+              }
             />
-            
-            <Route 
-              path="/register" 
+
+            <Route
+              path="/register"
               element={
                 <Layout showHeader={false} showFooter={false}>
                   <Register />
                 </Layout>
-              } 
+              }
             />
 
             {/* Rutas con Navbar */}
-            <Route 
-              path="/home" 
+            <Route
+              path="/home"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <HomePage />
                 </Layout>
-              } 
+              }
             />
 
-            <Route 
-              path="/resources" 
+            <Route
+              path="/resources"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <ResourcesPage />
                 </Layout>
-              } 
+              }
             />
 
-            <Route 
-              path="/exams" 
+            <Route
+              path="/exams"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <Exams/>
+                  <Exams />
                 </Layout>
-              } 
+              }
             />
 
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <Dashboard />
                 </Layout>
-              } 
+              }
             />
 
-            <Route 
-              path="/profile" 
+            <Route
+              path="/dashboard_bi"
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <DashboardBI />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/profile"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <ComingSoon pageName="Perfil" />
                 </Layout>
-              } 
+              }
             />
 
-            <Route 
-              path="/settings" 
+            <Route
+              path="/settings"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <ComingSoon pageName="Configuración" />
                 </Layout>
-              } 
+              }
             />
-            
-            <Route 
-              path="/about" 
+
+            <Route
+              path="/about"
               element={
                 <Layout isAuthenticated={isAuthenticated} user={user}>
                   <ComingSoon pageName="Acerca de" />
                 </Layout>
-              } 
+              }
             />
 
             {/* 404 Route */}
-            <Route 
-              path="*" 
+            <Route
+              path="*"
               element={
                 <Layout isAuthenticated={isAuthenticated} user={user}>
                   <ComingSoon pageName="404 - Página no encontrada" />
                 </Layout>
-              } 
+              }
             />
           </Routes>
         </AnimatePresence>

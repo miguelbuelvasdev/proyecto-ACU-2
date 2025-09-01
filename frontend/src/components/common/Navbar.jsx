@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Home,
   BookOpen,
@@ -12,15 +12,15 @@ import {
   HelpCircle,
   Settings,
   LogOut,
-  User
-} from 'lucide-react';
-import logoOVA from '../../assets/logoOVA.svg';
+  User,
+} from "lucide-react";
+import logoOVA from "../../assets/logoOVA.svg";
 
 const Navbar = () => {
   // Estado del menú móvil y perfil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [activeNav, setActiveNav] = useState('inicio');
+  const [activeNav, setActiveNav] = useState("inicio");
   const [notifications] = useState(3);
 
   // Navegación
@@ -30,23 +30,33 @@ const Navbar = () => {
   const userData = {
     name: "María González",
     email: "maria@lacocinademaria.com",
-    role: "Propietario"
+    role: "Propietario",
   };
 
   // Items del menú
   const navItems = [
-    { id: 'inicio', label: 'Inicio', icon: Home, path: '/home' },
-    { id: 'recursos', label: 'Recursos', icon: BookOpen, path: '/resources' },
-    { id: 'cuestionarios', label: 'Cuestionarios', icon: FileQuestion, path: '/exams' },
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/dashboard' }
+    { id: "inicio", label: "Inicio", icon: Home, path: "/home" },
+    { id: "recursos", label: "Recursos", icon: BookOpen, path: "/resources" },
+    {
+      id: "cuestionarios",
+      label: "Cuestionarios",
+      icon: FileQuestion,
+      path: "/exams",
+    },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: BarChart3,
+      path: "/dashboard_bi",
+    },
   ];
 
   // Items del menú de perfil
   const profileMenuItems = [
-    { label: 'Mi Perfil', icon: User, path: '/profile' },
-    { label: 'Configuración', icon: Settings, path: '/settings' },
-    { label: 'Ayuda', icon: HelpCircle, path: '/help' },
-    { label: 'Cerrar Sesión', icon: LogOut, action: 'logout' }
+    { label: "Mi Perfil", icon: User, path: "/profile" },
+    { label: "Configuración", icon: Settings, path: "/settings" },
+    { label: "Ayuda", icon: HelpCircle, path: "/help" },
+    { label: "Cerrar Sesión", icon: LogOut, action: "logout" },
   ];
 
   // Navegar y cerrar menú
@@ -57,9 +67,9 @@ const Navbar = () => {
 
   // Función para acciones del perfil
   const handleProfileAction = (item) => {
-    if (item.action === 'logout') {
-      console.log('Cerrando sesión...');
-      navigate('/login');
+    if (item.action === "logout") {
+      console.log("Cerrando sesión...");
+      navigate("/login");
     } else {
       handleNavigation(item.path);
     }
@@ -67,24 +77,23 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-
+    <nav className="sticky top-0 z-50 border-b shadow-sm bg-white/80 backdrop-blur-xl border-gray-200/50">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
           {/* Logo y Menú Desktop */}
           <div className="flex items-center">
-            <button 
-              onClick={() => handleNavigation('/home')}
+            <button
+              onClick={() => handleNavigation("/home")}
               className="flex items-center text-[#256B3E] hover:text-[#F4A300] transition-colors"
             >
-              <img 
-                src={logoOVA} 
-                alt="EcoAceite OVA Logo" 
-                className="w-24 h-12 object-contain"
+              <img
+                src={logoOVA}
+                alt="EcoAceite OVA Logo"
+                className="object-contain w-24 h-12"
               />
             </button>
-            
-            <div className="hidden md:flex space-x-4 ml-10">
+
+            <div className="hidden ml-10 space-x-4 md:flex">
               {navItems.map((item) => (
                 <button
                   key={item.id}
@@ -94,8 +103,8 @@ const Navbar = () => {
                   }}
                   className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2 ${
                     activeNav === item.id
-                      ? 'text-[#F4A300] bg-[#FFD439]/10'
-                      : 'text-[#256B3E] hover:text-[#F4A300]'
+                      ? "text-[#F4A300] bg-[#FFD439]/10"
+                      : "text-[#256B3E] hover:text-[#F4A300]"
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
@@ -110,7 +119,7 @@ const Navbar = () => {
             <button className="p-2 relative text-[#256B3E] hover:text-[#F4A300]">
               <Bell className="w-5 h-5" />
               {notifications > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
+                <span className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full">
                   {notifications}
                 </span>
               )}
@@ -128,11 +137,15 @@ const Navbar = () => {
               </button>
 
               {showProfileMenu && (
-                <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="absolute right-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-[#256B3E]">{userData.name}</p>
-                      <p className="text-xs text-[#256B3E]/60">{userData.role}</p>
+                      <p className="text-sm font-medium text-[#256B3E]">
+                        {userData.name}
+                      </p>
+                      <p className="text-xs text-[#256B3E]/60">
+                        {userData.role}
+                      </p>
                     </div>
                     {profileMenuItems.map((item) => (
                       <button
@@ -148,7 +161,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Botón Mobile */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -166,8 +179,8 @@ const Navbar = () => {
 
       {/* Menú Mobile */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
-          <div className="pt-2 pb-3 px-4 space-y-1">
+        <div className="bg-white border-t border-gray-200 md:hidden">
+          <div className="px-4 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -177,8 +190,8 @@ const Navbar = () => {
                 }}
                 className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium flex items-center gap-3 ${
                   activeNav === item.id
-                    ? 'bg-[#FFD439]/10 text-[#F4A300]'
-                    : 'text-[#256B3E] hover:text-[#F4A300]'
+                    ? "bg-[#FFD439]/10 text-[#F4A300]"
+                    : "text-[#256B3E] hover:text-[#F4A300]"
                 }`}
               >
                 <item.icon className="w-5 h-5" />
