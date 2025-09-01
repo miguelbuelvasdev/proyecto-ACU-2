@@ -152,7 +152,7 @@ const MinimalResourcesPage = () => {
     switch (type) {
       case "Video":
         return <Video className="w-4 h-4" />;
-      case "Guía":
+      case "Formato":
         return <Book className="w-4 h-4" />;
       case "Artículo":
         return <FileText className="w-4 h-4" />;
@@ -165,7 +165,7 @@ const MinimalResourcesPage = () => {
     switch (type) {
       case "Video":
         return "text-red-600 bg-red-50 border-red-200";
-      case "Guía":
+      case "Formato":
         return "text-blue-600 bg-blue-50 border-blue-200";
       case "Artículo":
         return "text-green-600 bg-green-50 border-green-200";
@@ -242,15 +242,52 @@ const MinimalResourcesPage = () => {
 
       {/* Container principal con padding top para el navbar */}
       <div className="pt-16">
-        <iframe
-          title="COCINA HEROICA"
-          frameBorder="0"
-          width="1200"
-          height="675"
-          src="https://view.genially.com/6892938bc51cd82df39de936"
-          allowFullScreen
-          className="mx-auto mb-8 rounded-2xl"
-        ></iframe>
+        <div className="flex flex-col gap-8 mb-8 lg:flex-row lg:items-start lg:justify-center">
+          <iframe
+            title="COCINA HEROICA"
+            frameBorder="0"
+            width="1200"
+            height="675"
+            src="https://view.genially.com/6892938bc51cd82df39de936"
+            allowFullScreen
+            className="rounded-2xl lg:mb-0"
+          ></iframe>
+          {/* Guías PDF descargables */}
+          <div className="flex flex-col w-full gap-6 lg:w-80">
+            <div className="flex flex-col items-center p-6 bg-white border border-gray-200 shadow-sm rounded-2xl">
+              <BookOpen className="w-8 h-8 text-[#256B3E] mb-2" />
+              <h4 className="font-bold text-[#256B3E] text-lg mb-2 text-center">
+                Guía Rápida - Ruta del Aceite
+              </h4>
+              <a
+                href="https://ecoaceite.s3.us-east-1.amazonaws.com/educational_units/info_files/GU%C3%8DA+R%C3%81PIDA+-Ruta+del+aceite.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Descargar PDF
+              </a>
+            </div>
+            <div className="flex flex-col items-center p-6 bg-white border border-gray-200 shadow-sm rounded-2xl">
+              <BookOpen className="w-8 h-8 text-[#256B3E] mb-2" />
+              <h4 className="font-bold text-[#256B3E] text-lg mb-2 text-center">
+                Manual Facilitador
+              </h4>
+              <a
+                href="https://ecoaceite.s3.us-east-1.amazonaws.com/educational_units/info_files/MANUAL+FACILITADOR.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Descargar PDF
+              </a>
+            </div>
+          </div>
+        </div>
         <div className="flex">
           {/* Panel lateral de unidades - Desktop */}
           <aside className="sticky hidden min-h-screen overflow-y-auto bg-white border-r border-gray-200 lg:block w-96 top-24">
@@ -260,10 +297,10 @@ const MinimalResourcesPage = () => {
                   <div className="w-10 h-10 bg-gradient-to-br from-[#256B3E] to-[#1F5D34] rounded-xl flex items-center justify-center">
                     <GraduationCap className="w-5 h-5 text-white" />
                   </div>
-                  Unidades de Aprendizaje
+                  Retos
                 </h2>
                 <p className="text-sm text-[#256B3E]/70">
-                  Selecciona una unidad para explorar sus recursos educativos
+                  Selecciona un reto para observar los distintos formatos
                 </p>
               </div>
 
@@ -296,9 +333,6 @@ const MinimalResourcesPage = () => {
                           <h3 className="font-semibold text-[#256B3E] text-base">
                             {unit.title}
                           </h3>
-                          <p className="text-xs text-[#256B3E]/60 font-medium">
-                            {unit.subtitle}
-                          </p>
                         </div>
                       </div>
                       <ChevronRight
@@ -307,10 +341,6 @@ const MinimalResourcesPage = () => {
                         }`}
                       />
                     </div>
-
-                    <p className="text-sm text-[#256B3E]/70 mb-4 leading-relaxed">
-                      {unit.description}
-                    </p>
 
                     {/* Progress Bar */}
                     <div className="mb-4">
@@ -329,13 +359,6 @@ const MinimalResourcesPage = () => {
 
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center space-x-3">
-                        <span
-                          className={`px-2 py-1 rounded-full font-medium ${getDifficultyColor(
-                            unit.level
-                          )}`}
-                        >
-                          {unit.level}
-                        </span>
                         <span className="text-[#256B3E]/60">
                           {unit.resources} recursos
                         </span>
@@ -456,8 +479,8 @@ const MinimalResourcesPage = () => {
             <div className="p-6 lg:px-8">
               {/* Header de la unidad actual */}
               <div className="mb-8">
-                <div className="flex flex-col justify-between gap-6 mb-6 lg:flex-row lg:items-start">
-                  <div className="flex items-start space-x-4">
+                <div className="flex flex-col items-center justify-between gap-6 mb-6 lg:flex-row">
+                  <div className="flex items-center space-x-4">
                     <div
                       className={`w-16 h-16 bg-gradient-to-r ${selectedUnitObj?.color} rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg relative flex-shrink-0`}
                     >
@@ -472,12 +495,6 @@ const MinimalResourcesPage = () => {
                       <h1 className="text-2xl lg:text-3xl font-bold text-[#256B3E] mb-1 break-words">
                         {selectedUnitObj?.title}
                       </h1>
-                      <p className="text-[#256B3E]/70 text-base lg:text-lg mb-2">
-                        {selectedUnitObj?.subtitle}
-                      </p>
-                      <p className="text-[#256B3E]/60 text-sm leading-relaxed">
-                        {selectedUnitObj?.description}
-                      </p>
                     </div>
                   </div>
 
@@ -493,23 +510,13 @@ const MinimalResourcesPage = () => {
                         </span>
                       </div>
                     </div>
-
-                    <div className="px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-xl">
-                      <span
-                        className={`text-sm font-medium px-3 py-1 rounded-full ${getDifficultyColor(
-                          selectedUnitObj?.level
-                        )}`}
-                      >
-                        {selectedUnitObj?.level}
-                      </span>
-                    </div>
                   </div>
                 </div>
 
                 {/* Progress bar for current unit */}
                 <div className="p-4 mb-6 bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="flex justify-between text-sm text-[#256B3E] mb-2">
-                    <span className="font-medium">Progreso de la unidad</span>
+                    <span className="font-medium">Progreso del reto</span>
                     <span className="font-bold">
                       {selectedUnitObj?.progress}%
                     </span>
@@ -597,7 +604,7 @@ const MinimalResourcesPage = () => {
                         {/* Placeholder de imagen */}
                         <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
                           <img
-                            src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/65545f71-83d5-43ad-8e13-6a3c70e977ee.png"
+                            src={resource.guide_image}
                             alt={`Imagen representativa del recurso educativo sobre ${resource.title} - contenido especializado en manejo de aceite de cocina usado con técnicas profesionales y metodologías avanzadas`}
                             className="object-cover w-full h-full"
                           />
@@ -616,7 +623,7 @@ const MinimalResourcesPage = () => {
                               </div>
                             </div>
                             <div
-                              className={`px-3 py-1 rounded-full text-xs font-medium border backdrop-blur-sm ${getDifficultyColor(
+                              className={`px-3 py-1 rounded-full text-xs text-center font-medium border backdrop-blur-sm ${getDifficultyColor(
                                 resource.difficulty
                               )}`}
                             >

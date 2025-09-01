@@ -84,7 +84,7 @@ const Login = () => {
       localStorage.setItem("user_id", response.data.user_id);
 
       // Redirigir al dashboard
-      navigate("/dashboard");
+      navigate("/home");
     } catch (error) {
       // ...manejo de errores...
     } finally {

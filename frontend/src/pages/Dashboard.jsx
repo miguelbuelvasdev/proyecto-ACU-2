@@ -557,7 +557,7 @@ const RestaurantDashboard = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900">
-                Ubicación y Promedio
+                Ubicación y Puntaje
               </h2>
               <div className="flex items-center space-x-2 text-sm text-gray-500">
                 <div className="flex items-center space-x-1">
