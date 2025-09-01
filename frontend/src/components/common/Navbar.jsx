@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
@@ -22,16 +22,27 @@ const Navbar = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeNav, setActiveNav] = useState("inicio");
   const [notifications] = useState(3);
+  const [userData, setUserData] = useState(null);
 
   // Navegación
   const navigate = useNavigate();
 
-  // Datos del usuario (simulados)
-  const userData = {
-    name: "María González",
-    email: "maria@lacocinademaria.com",
-    role: "Propietario",
-  };
+  useEffect(() => {
+    const userId = localStorage.getItem("user_id");
+    if (!userId) return;
+
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/v1/user/${userId}`);
+        const data = await res.json();
+        setUserData(data);
+      } catch (err) {
+        setUserData(null);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   // Items del menú
   const navItems = [
@@ -47,7 +58,7 @@ const Navbar = () => {
       id: "dashboard",
       label: "Dashboard",
       icon: BarChart3,
-      path: "/dashboard_bi",
+      path: "/dashboard",
     },
   ];
 
@@ -75,6 +86,20 @@ const Navbar = () => {
     }
     setShowProfileMenu(false);
   };
+
+  const getRoleLabel = (role) => {
+    switch (role) {
+      case "restaurant_owner":
+        return "Propietario";
+      case "admin":
+        return "Administrador";
+      default:
+        return "Sin rol";
+    }
+  };
+
+  const userName = userData?.name || "Usuario";
+  const userRole = getRoleLabel(userData?.role);
 
   return (
     <nav className="sticky top-0 z-50 border-b shadow-sm bg-white/80 backdrop-blur-xl border-gray-200/50">
@@ -132,7 +157,7 @@ const Navbar = () => {
                 className="flex items-center text-sm rounded-full focus:outline-none"
               >
                 <div className="w-8 h-8 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-full flex items-center justify-center text-white font-bold">
-                  {userData.name.charAt(0)}
+                  {userName.charAt(0)}
                 </div>
               </button>
 
@@ -141,11 +166,9 @@ const Navbar = () => {
                   <div className="py-1">
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-medium text-[#256B3E]">
-                        {userData.name}
+                        {userName}
                       </p>
-                      <p className="text-xs text-[#256B3E]/60">
-                        {userData.role}
-                      </p>
+                      <p className="text-xs text-[#256B3E]/60">{userRole}</p>
                     </div>
                     {profileMenuItems.map((item) => (
                       <button

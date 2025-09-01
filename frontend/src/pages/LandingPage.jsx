@@ -397,35 +397,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="px-48 py-6 rounded-2xl"
-      >
-        <div
-          style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}
-        >
-          <iframe
-            title="COCINA HEROICA"
-            frameBorder="0"
-            width="1200"
-            height="675"
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              borderRadius: "16px",
-            }}
-            src="https://view.genially.com/6892938bc51cd82df39de936"
-            allowFullScreen
-          ></iframe>
-        </div>
-      </motion.div>
-
       {/* Results Section */}
       <section id="estadisticas" className="relative z-10 px-4 py-20 sm:px-6">
         <div className="container mx-auto">
