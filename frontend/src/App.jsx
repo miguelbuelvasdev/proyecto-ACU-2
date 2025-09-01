@@ -22,7 +22,6 @@ import HomePage from "./pages/HomePage";
 import ResourcesPage from "./pages/ResourcesPage";
 import Exams from "./pages/ExamsPage";
 import Dashboard from "./pages/Dashboard";
-import { DashboardBI } from "./pages/DashboardBI";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -165,15 +164,6 @@ function App() {
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
                   <Dashboard />
-                </Layout>
-              }
-            />
-
-            <Route
-              path="/dashboard_bi"
-              element={
-                <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <DashboardBI />
                 </Layout>
               }
             />

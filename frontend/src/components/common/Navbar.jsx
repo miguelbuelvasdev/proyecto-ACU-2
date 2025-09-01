@@ -80,7 +80,7 @@ const Navbar = () => {
   const handleProfileAction = (item) => {
     if (item.action === "logout") {
       console.log("Cerrando sesión...");
-      navigate("/login");
+      navigate("/");
     } else {
       handleNavigation(item.path);
     }

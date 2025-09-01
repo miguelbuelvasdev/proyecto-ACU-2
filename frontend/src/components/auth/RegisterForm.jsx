@@ -164,7 +164,6 @@ const RegisterPage = () => {
           verified: true,
         },
         restaurant: {
-          // user_id lo asigna el backend
           capacity: Number(formData.capacity),
           founding_year: Number(formData.foundedYear),
           oil_usage_estimate: Number(formData.oilUsageEstimate),
@@ -177,7 +176,14 @@ const RegisterPage = () => {
         },
       };
 
-      await axios.post(`${API_BASE_URL}/auth/register`, payload);
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/register`,
+        payload
+      );
+
+      // Guarda access_token y user_id en localStorage
+      localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("user_id", response.data.user.id);
 
       alert("¡Registro exitoso! Bienvenido a EcoAceite");
       navigate("/home");
