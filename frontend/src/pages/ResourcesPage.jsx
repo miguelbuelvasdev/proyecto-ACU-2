@@ -286,6 +286,22 @@ const MinimalResourcesPage = () => {
                 Descargar PDF
               </a>
             </div>
+            <div className="flex flex-col items-center p-6 bg-white border border-gray-200 shadow-sm rounded-2xl">
+              <BookOpen className="w-8 h-8 text-[#256B3E] mb-2" />
+              <h4 className="font-bold text-[#256B3E] text-lg mb-2 text-center">
+                Calendario
+              </h4>
+              <a
+                href="https://ecoaceite.s3.us-east-1.amazonaws.com/educational_units/info_files/calendario+septiembre.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow hover:shadow-lg transition-all flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Descargar PDF
+              </a>
+            </div>
           </div>
         </div>
         <div className="flex">

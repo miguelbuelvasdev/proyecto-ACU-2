@@ -93,11 +93,11 @@ const RegisterPage = () => {
     switch (step) {
       case 1:
         if (!formData.restaurantName)
-          newErrors.restaurantName = "El nombre del restaurante es requerido";
+          newErrors.restaurantName =
+            "El nombre del establecimiento es requerido";
         if (!formData.restaurantType)
-          newErrors.restaurantType = "Selecciona un tipo de restaurante";
-        if (!formData.capacity)
-          newErrors.capacity = "La capacidad es requerida";
+          newErrors.restaurantType = "Selecciona un tipo de establecimiento";
+        if (!formData.capacity) newErrors.capacity = "La comanda es requerida";
         if (!formData.foundedYear)
           newErrors.foundedYear = "El año de fundación es requerido";
         break;
@@ -206,13 +206,13 @@ const RegisterPage = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <h3 className="text-2xl font-bold text-[#256B3E] mb-6">
-              Información del Restaurante
+            <h3 className="text-xl font-bold text-[#256B3E] mb-6">
+              Información del Establecimiento
             </h3>
 
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
-                Nombre del Restaurante
+                Nombre del Establecimiento
               </label>
               <div className="relative">
                 <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
@@ -235,7 +235,7 @@ const RegisterPage = () => {
 
             <div>
               <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
-                Tipo de Restaurante
+                Tipo de Establecimiento
               </label>
               <div className="relative">
                 <ChefHat className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
@@ -264,7 +264,7 @@ const RegisterPage = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-[#256B3E]/80 mb-2">
-                  Capacidad
+                  Comanda (Diaria)
                 </label>
                 <div className="relative">
                   <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#F4A300]/60" />
@@ -576,7 +576,7 @@ const RegisterPage = () => {
   };
 
   const steps = [
-    { number: 1, title: "Restaurante", description: "Información básica" },
+    { number: 1, title: "Establecimiento", description: "Información básica" },
     { number: 2, title: "Contacto", description: "Datos de contacto" },
     { number: 3, title: "Cuenta", description: "Configuración final" },
   ];
@@ -598,51 +598,16 @@ const RegisterPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center lg:text-left"
           >
-            <div className="flex items-center justify-center mb-8 space-x-3 lg:justify-start">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#FFD439] to-[#F4A300] rounded-2xl shadow-lg flex items-center justify-center">
-                <Leaf className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-[#256B3E]">EcoAceite</h1>
-                <p className="text-sm text-[#256B3E]/70 font-medium tracking-wider">
-                  OVA EDUCATIVO
-                </p>
-              </div>
-            </div>
-
             <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-[#256B3E] leading-tight">
-              Únete a la <span className="text-[#F4A300]">Revolución</span>
+              <span className="text-[#F4A300]">Eco-sistema G:</span>
               <br />
-              del ACU Sostenible
+              Por una correcta gestión de grasas y aceites
             </h2>
 
             <p className="text-lg text-[#256B3E]/80 mb-8 leading-relaxed">
-              Capacita a tu equipo en el manejo responsable del Aceite de Cocina
-              Usado y contribuye a un futuro más sostenible.
+              Capacita a tu equipo en el manejo responsable de Grasas y Aceite
+              de Cocina Usado y contribuye a un futuro más sostenible.
             </p>
-
-            {/* Benefits */}
-            <div className="space-y-4">
-              {[
-                "Certificación oficial reconocida",
-                "Contenido multimedia interactivo",
-                "Protocolos de seguridad actualizados",
-                "Soporte técnico especializado",
-              ].map((benefit, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                  className="flex items-center space-x-3"
-                >
-                  <div className="w-6 h-6 bg-[#F4A300] rounded-full flex items-center justify-center">
-                    <Check className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-[#256B3E]/80">{benefit}</span>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
           {/* Right Side - Form */}

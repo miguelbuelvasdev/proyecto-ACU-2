@@ -84,20 +84,16 @@ const LandingPage = () => {
 
   const stats = [
     {
-      value: "0+",
-      label: "Restaurantes Capacitados",
+      value: "50+",
+      label: "Restaurantes Caracterizados",
       icon: <Target className="w-6 h-6" />,
     },
     {
-      value: "0%",
-      label: "Tasa de Aprobación",
+      value: "25+",
+      label: "Establecimientos Dentro de la Competencia",
       icon: <TrendingUp className="w-6 h-6" />,
     },
-    {
-      value: "0+",
-      label: "Litros ACU Gestionados",
-      icon: <Recycle className="w-6 h-6" />,
-    },
+
     {
       value: "24/7",
       label: "Acceso al Contenido",
@@ -223,28 +219,15 @@ const LandingPage = () => {
               transition={{ duration: 0.8 }}
               className="text-center lg:text-left"
             >
-              {/* Educational Badge */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="inline-flex items-center gap-2 px-4 py-2 mb-8 border border-gray-200 rounded-full bg-gradient-to-r from-gray-100 to-gray-50"
-              >
-                <BookOpen className="w-4 h-4 text-[#F4A300]" />
-                <span className="text-sm font-medium text-[#256B3E]">
-                  Objeto Virtual de Aprendizaje
-                </span>
-                <div className="w-2 h-2 bg-[#FFD439] rounded-full animate-pulse"></div>
-              </motion.div>
-
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-[#256B3E]">
-                <span className="block mb-2">Transformando tu cocina,</span>
-                <span className="block">Renovando la ciudad</span>
+                <span className="block mb-2">Centro de Formación Virtual</span>
+                <span className="block text-[#f0cd2b]">Cocina Heróica</span>
               </h1>
 
               <p className="text-xl text-[#256B3E]/80 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
                 Plataforma educativa interactiva para aprender el manejo seguro
-                y responsable del Aceite de Cocina Usado (ACU) según normativas
-                colombianas vigentes.
+                y responsable de Grasas y Aceite de Cocina Usado (ACU) según
+                normativas colombianas vigentes.
               </p>
 
               <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
@@ -258,7 +241,7 @@ const LandingPage = () => {
                   className="group px-8 py-4 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-2xl font-bold shadow-xl shadow-[#FFD439]/25 hover:shadow-2xl hover:shadow-[#FFD439]/40 transition-all duration-300"
                 >
                   <span className="flex items-center justify-center gap-2">
-                    Registrase
+                    Regístrate
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   </span>
                 </motion.button>
@@ -331,72 +314,6 @@ const LandingPage = () => {
         </motion.div>
       </section>
 
-      {/* Modules Section */}
-      <section
-        id="caracteristicas"
-        className="relative z-10 px-4 py-20 sm:px-6 bg-gradient-to-b from-white to-gray-50/50"
-      >
-        <div className="container mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="mb-16 text-center"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gray-100 border border-gray-200 rounded-full">
-              <BookOpen className="w-4 h-4 text-[#F4A300]" />
-              <span className="text-sm font-medium text-[#256B3E]">
-                Capacitación Integral
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#256B3E]">
-              Módulos Educativos Interactivos
-            </h2>
-            <p className="text-xl text-[#256B3E]/80 max-w-3xl mx-auto">
-              Aprende sobre el manejo seguro y responsable del ACU a través de
-              nuestro contenido multimedia
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                className="relative group"
-              >
-                <div className="relative p-8 transition-all duration-300 bg-white border border-gray-200 shadow-lg rounded-2xl shadow-black/5 hover:shadow-xl hover:shadow-black/10">
-                  <div
-                    className={`${feature.color} absolute inset-0 rounded-2xl`}
-                  >
-                    <div className="w-full h-full bg-white rounded-2xl"></div>
-                  </div>
-
-                  <div className="relative z-10">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      {feature.icon}
-                    </div>
-                    <h3 className="text-xl font-bold mb-3 text-[#256B3E] group-hover:text-[#256B3E]/90">
-                      {feature.title}
-                    </h3>
-                    <p className="text-[#256B3E]/70 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Results Section */}
       <section id="estadisticas" className="relative z-10 px-4 py-20 sm:px-6">
         <div className="container mx-auto">
@@ -423,11 +340,11 @@ const LandingPage = () => {
                 Resultados de Nuestro Programa
               </h2>
               <p className="text-xl text-[#256B3E]/80">
-                Transformando la gestión de ACU en cocinas comerciales
+                Transformando la gestión de Grasas y ACU en cocinas comerciales
               </p>
             </motion.div>
 
-            <div className="relative z-10 grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div className="relative z-10 grid grid-cols-2 gap-8 md:grid-cols-3">
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
@@ -473,11 +390,11 @@ const LandingPage = () => {
                 <Leaf className="w-10 h-10 text-[#FFD439]" />
               </div>
               <h2 className="mb-6 text-4xl font-bold md:text-5xl">
-                Únete a la Revolución del ACU
+                Eco-sistema G: <br /> Por una correcta gestión de Grasas y
+                Aceites
               </h2>
               <p className="max-w-2xl mx-auto mb-8 text-xl leading-relaxed text-white/90">
-                Capacita a tu personal en el manejo seguro y responsable del
-                Aceite de Cocina Usado
+                ¡Transforma tu cocina, renueva la ciudad!
               </p>
               <motion.button
                 onClick={() => navigate("/register")}
@@ -508,8 +425,8 @@ const LandingPage = () => {
                 />
               </div>
               <p className="text-[#256B3E]/70 mb-6 max-w-md leading-relaxed mx-auto md:mx-0">
-                Plataforma educativa para el manejo seguro y responsable del
-                Aceite de Cocina Usado en cocinas comerciales.
+                Plataforma educativa para el manejo seguro y responsable de
+                Grasas y Aceite de Cocina Usado en cocinas comerciales.
               </p>
               <div className="flex justify-center space-x-4 md:justify-start">
                 <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center hover:border-[#F4A300] hover:bg-[#F4A300] group transition-all duration-300 cursor-pointer">
