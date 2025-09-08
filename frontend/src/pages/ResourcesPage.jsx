@@ -59,6 +59,12 @@ const MinimalResourcesPage = () => {
       borderColor: "border-amber-200",
       textColor: "text-amber-700",
     },
+    5: {
+      color: "from-purple-500 to-purple-600",
+      lightColor: "bg-purple-50",
+      borderColor: "border-purple-200",
+      textColor: "text-purple-700",
+    },
   };
 
   //Fetch educational units
@@ -154,7 +160,7 @@ const MinimalResourcesPage = () => {
         return <Video className="w-4 h-4" />;
       case "Formato":
         return <Book className="w-4 h-4" />;
-      case "Artículo":
+      case "Colaborativo":
         return <FileText className="w-4 h-4" />;
       default:
         return <Book className="w-4 h-4" />;
@@ -549,7 +555,7 @@ const MinimalResourcesPage = () => {
                   </div>
                 </div>
 
-                {/* Barra de búsqueda */}
+                {/* Barra de búsqueda
                 <div className="relative max-w-md">
                   <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#256B3E]/50 w-5 h-5" />
                   <input
@@ -567,7 +573,7 @@ const MinimalResourcesPage = () => {
                       <X className="w-5 h-5" />
                     </button>
                   )}
-                </div>
+                </div> */}
               </div>
 
               {/* Grid de recursos - Mejor centrado */}
@@ -674,9 +680,12 @@ const MinimalResourcesPage = () => {
                           <h3 className="font-bold text-[#256B3E] text-lg mb-3 line-clamp-2 group-hover:text-[#256B3E]/80 transition-colors leading-tight">
                             {resource.title}
                           </h3>
-                          <p className="text-[#256B3E]/70 text-sm mb-4 line-clamp-3 leading-relaxed">
-                            {resource.description}
-                          </p>
+                          {/* Solo mostrar descripción si existe */}
+                          {resource.description && (
+                            <p className="text-[#256B3E]/70 text-sm mb-4 leading-relaxed">
+                              {resource.description}
+                            </p>
+                          )}
 
                           {/* Metadatos */}
                           <div className="flex items-center justify-between text-xs text-[#256B3E]/60 mb-4">
@@ -800,7 +809,7 @@ const MinimalResourcesPage = () => {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate("/exams")}
+                        onClick={() => navigate("/exam")}
                         className="px-8 py-3 font-medium text-white transition-all duration-300 shadow-lg bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl hover:shadow-xl"
                       >
                         Realizar Evaluación

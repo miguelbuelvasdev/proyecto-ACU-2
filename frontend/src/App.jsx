@@ -20,8 +20,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HomePage from "./pages/HomePage";
 import ResourcesPage from "./pages/ResourcesPage";
-import Exams from "./pages/ExamsPage";
 import Dashboard from "./pages/Dashboard";
+import ExamForm from "./pages/exams/ExamForm";
+import ExamsPage from "./pages/ExamsPage";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -154,7 +155,7 @@ function App() {
               path="/exams"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <Exams />
+                  <ExamsPage />
                 </Layout>
               }
             />
@@ -191,6 +192,21 @@ function App() {
               element={
                 <Layout isAuthenticated={isAuthenticated} user={user}>
                   <ComingSoon pageName="Acerca de" />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/exam_form/:id/:title"
+              element={
+                <Layout
+                  showHeader={false}
+                  showFooter={false}
+                  showNavbar={true}
+                  isAuthenticated={isAuthenticated}
+                  user={user}
+                >
+                  <ExamForm />
                 </Layout>
               }
             />
