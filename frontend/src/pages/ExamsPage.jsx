@@ -37,12 +37,13 @@ const examVisuals = {
 const ExamsPage = () => {
   const navigate = useNavigate();
   const [exams, setExams] = useState([]);
+  const [userResults, setUserResults] = useState([]);
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/educational-modules")
       .then((res) => res.json())
       .then((data) => {
-        // Mapea la respuesta para agregar campos visuales y de estado
         setExams(
           data.map((exam) => ({
             ...exam,
@@ -57,6 +58,32 @@ const ExamsPage = () => {
         );
       });
   }, []);
+
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`http://localhost:3000/api/v1/quiz-result/user/${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUserResults(data);
+      });
+  }, [userId]);
+
+  // Relaciona los resultados con los exámenes
+  const examsWithResults = exams.map((exam) => {
+    // Busca resultado por module_id (id del examen)
+    const result = userResults.find((r) => r.module.id === exam.id);
+
+    if (result) {
+      return {
+        ...exam,
+        completed: true,
+        status: "completed",
+        score: result.score,
+      };
+    }
+
+    return exam;
+  });
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -144,7 +171,7 @@ const ExamsPage = () => {
 
           {/* Exams Grid */}
           <div className="grid grid-cols-1 gap-8 mb-12 xl:grid-cols-2">
-            {exams.map((exam, index) => (
+            {examsWithResults.map((exam, index) => (
               <motion.div
                 key={exam.id}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
@@ -251,15 +278,16 @@ const ExamsPage = () => {
                       Beneficios
                     </h4>
                     <ul className="space-y-2">
-                      {exam.benefits.map((benefit, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 text-sm text-[#256B3E]/70"
-                        >
-                          <div className="w-1.5 h-1.5 bg-[#F4A300] rounded-full mt-2 flex-shrink-0"></div>
-                          <span>{benefit}</span>
-                        </li>
-                      ))}
+                      {exam.benefits &&
+                        exam.benefits.map((benefit, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start gap-2 text-sm text-[#256B3E]/70"
+                          >
+                            <div className="w-1.5 h-1.5 bg-[#F4A300] rounded-full mt-2 flex-shrink-0"></div>
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
                     </ul>
                   </div>
 
@@ -287,12 +315,12 @@ const ExamsPage = () => {
                     }}
                     whileTap={{ scale: exam.status === "available" ? 0.98 : 1 }}
                     onClick={() => handleStartExam(exam)}
-                    disabled={exam.status === "locked"}
+                    disabled={exam.status !== "available"}
                     className={`w-full py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
                       exam.status === "available"
                         ? "bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-[#256B3E] hover:shadow-lg hover:shadow-[#FFD439]/25"
                         : exam.status === "completed"
-                        ? `bg-gradient-to-r ${exam.color} text-white`
+                        ? `bg-gradient-to-r ${exam.color} text-white cursor-not-allowed`
                         : "bg-gray-100 text-gray-400 cursor-not-allowed"
                     }`}
                   >
@@ -312,7 +340,7 @@ const ExamsPage = () => {
                           ? "Continuar Examen"
                           : "Iniciar Examen"
                         : exam.status === "completed"
-                        ? "Ver Resultados"
+                        ? "Completado"
                         : "Bloqueado"}
                     </span>
 

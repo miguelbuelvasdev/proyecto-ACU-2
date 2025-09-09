@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ExamForm = () => {
   const { id, title } = useParams();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+
+  const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
     fetch("http://localhost:3000/api/v1/question/by-module-type/inicial")
@@ -30,10 +36,50 @@ const ExamForm = () => {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setSubmitSuccess(false);
+    setSubmitError(null);
+
+    try {
+      const payload = {
+        user_id: userId,
+        module_id: id,
+        answers: Object.entries(answers).map(
+          ([question_id, selected_option]) => ({
+            question_id,
+            user_id: userId,
+            selected_option,
+          })
+        ),
+      };
+
+      const res = await fetch(
+        "http://localhost:3000/api/v1/user-answer/submit",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) throw new Error("Error enviando respuestas");
+
+      setSubmitSuccess(true);
+
+      navigate("/exams");
+    } catch (err) {
+      setSubmitError("No se pudo enviar el cuestionario. Intenta de nuevo.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) return <div>Cargando cuestionario...</div>;
 
   return (
-    <div className="max-w-3xl px-4 py-8 mx-auto">
+    <form className="max-w-3xl px-4 py-8 mx-auto" onSubmit={handleSubmit}>
       <h1 className="text-3xl font-bold mb-8 text-[#256B3E]">
         {title ? decodeURIComponent(title) : "Cuestionario"}
       </h1>
@@ -63,6 +109,7 @@ const ExamForm = () => {
                           checked={answers[q.id] === opt}
                           onChange={() => handleChange(q.id, opt)}
                           className="accent-[#F4A300] w-5 h-5"
+                          required={idx === 0}
                         />
                         <span className="mt-1 text-sm">{opt}</span>
                       </label>
@@ -73,9 +120,24 @@ const ExamForm = () => {
           </div>
         </div>
       ))}
-      {/* Aquí puedes agregar un botón para enviar las respuestas */}
-      {/* <button className="mt-8 px-6 py-2 bg-[#256B3E] text-white rounded-xl font-bold">Enviar</button> */}
-    </div>
+
+      {submitError && (
+        <div className="mb-4 font-medium text-red-600">{submitError}</div>
+      )}
+      {submitSuccess && (
+        <div className="mb-4 font-medium text-green-700">
+          ¡Cuestionario enviado correctamente!
+        </div>
+      )}
+
+      <button
+        type="submit"
+        className="mt-8 px-6 py-2 bg-[#256B3E] text-white rounded-xl font-bold disabled:opacity-60"
+        disabled={submitting}
+      >
+        {submitting ? "Enviando..." : "Enviar respuestas"}
+      </button>
+    </form>
   );
 };
 
