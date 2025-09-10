@@ -197,7 +197,7 @@ function App() {
             />
 
             <Route
-              path="/exam_form/:id/:title"
+              path="/exam_form/:id/:type"
               element={
                 <Layout
                   showHeader={false}

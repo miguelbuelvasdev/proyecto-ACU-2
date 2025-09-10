@@ -29,6 +29,7 @@ const MinimalResourcesPage = () => {
   const [userGuideUploads, setUserGuideUploads] = useState([]);
   const [units, setUnits] = useState([]);
   const [resources, setResources] = useState([]);
+  const [unitProgress, setUnitProgress] = useState([]); // Nuevo estado
   const fileInputRefs = useRef([]);
 
   const userId = localStorage.getItem("user_id");
@@ -134,6 +135,51 @@ const MinimalResourcesPage = () => {
     if (!userId) return;
     fetchUserGuideUploads();
   }, [userId]);
+
+  // Fetch progreso de usuario por unidad
+  useEffect(() => {
+    if (!userId) return;
+    const fetchUnitProgress = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/v1/user-educational-unit-progress/user/${userId}`
+        );
+        const data = await res.json();
+        setUnitProgress(data);
+      } catch (err) {
+        setUnitProgress([]);
+        console.log("Error fetching unit progress:", err);
+      }
+    };
+    fetchUnitProgress();
+  }, [userId]);
+
+  // Actualiza el progreso de cada unidad según el progreso del usuario
+  useEffect(() => {
+    if (!units.length || !unitProgress.length) return;
+
+    setUnits((prevUnits) =>
+      prevUnits.map((unit) => {
+        const progressObj = unitProgress.find(
+          (p) => p.unit && p.unit.id === unit.id
+        );
+        if (progressObj) {
+          let progressPercent = 0;
+          if (unit.resources > 0) {
+            progressPercent = Math.round(
+              (progressObj.progress / unit.resources) * 100
+            );
+          }
+          return {
+            ...unit,
+            progress: progressPercent,
+            completed: !!progressObj.completed,
+          };
+        }
+        return unit;
+      })
+    );
+  }, [unitProgress, units.length]);
 
   const currentResources = resources
     .filter((resource) => resource.unit_id === selectedUnit)
@@ -248,7 +294,7 @@ const MinimalResourcesPage = () => {
 
       {/* Container principal con padding top para el navbar */}
       <div className="pt-16">
-        <div className="flex flex-col gap-8 mb-8 lg:flex-row lg:items-start lg:justify-center">
+        <div className="flex flex-col gap-8 px-8 mb-8 lg:flex-row lg:items-start lg:justify-center">
           <iframe
             title="COCINA HEROICA"
             frameBorder="0"
@@ -554,26 +600,6 @@ const MinimalResourcesPage = () => {
                     />
                   </div>
                 </div>
-
-                {/* Barra de búsqueda
-                <div className="relative max-w-md">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#256B3E]/50 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="Buscar recursos en esta unidad..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#F4A300] focus:border-[#F4A300] transition-all duration-300 bg-white shadow-sm"
-                  />
-                  {searchTerm && (
-                    <button
-                      onClick={() => setSearchTerm("")}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#256B3E]/50 hover:text-[#256B3E] transition-colors"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  )}
-                </div> */}
               </div>
 
               {/* Grid de recursos - Mejor centrado */}

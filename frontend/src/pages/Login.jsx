@@ -15,7 +15,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // URL base de la API (debería venir de las variables de entorno)
   const API_BASE_URL =
     import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
@@ -87,6 +86,19 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       // ...manejo de errores...
+      if (error.response) {
+        // El servidor respondió con un código de estado fuera del rango 2xx
+        setErrors((prev) => ({
+          ...prev,
+          email: error.response.data.message || "Error en el inicio de sesión",
+        }));
+      } else {
+        // Error en la configuración de la solicitud
+        setErrors((prev) => ({
+          ...prev,
+          email: "Error en la conexión",
+        }));
+      }
     } finally {
       setIsLoading(false);
     }

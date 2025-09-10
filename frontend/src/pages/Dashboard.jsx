@@ -14,159 +14,37 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Radar,
-  LineChart,
-  Line,
 } from "recharts";
-import {
-  MapPin,
-  TrendingUp,
-  Award,
-  Users,
-  Building,
-  Calendar,
-  Clock,
-  Target,
-  Star,
-  ChevronRight,
-  Filter,
-  Download,
-  BarChart3,
-  Activity,
-  Zap,
-  Shield,
-  CheckCircle,
-  DollarSign,
-  Thermometer,
-  AlertTriangle,
-  Settings,
-  Wrench,
-  Leaf,
-} from "lucide-react";
+import { Star, TrendingUp } from "lucide-react";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
+const RADAR_SECTIONS = [
+  "Selección y Adquisición de Aceites",
+  "Uso Sostenible del Aceite en la Cocina",
+  "Manejo Seguro y Responsable del ACU (Aceite de Cocina Usado)",
+  "Manejo Seguro y Responsable de Grasas",
+];
 
 const RestaurantDashboard = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [restaurantFilter, setRestaurantFilter] = useState("");
   const [users, setUsers] = useState([]);
+  const [userQuizResults, setUserQuizResults] = useState([]);
+  const [radarUserData, setRadarUserData] = useState(null);
+  const [restaurantTotals, setRestaurantTotals] = useState([]);
+  const [globalAverage, setGlobalAverage] = useState(null);
+  const [stackedUnitScores, setStackedUnitScores] = useState([]);
 
-  // Datos de restaurantes - Centralizados y normalizados
-  //Todo: obtener datos de los cuestionarios de los restaurantes
-  const restaurants = useMemo(
-    () => [
-      {
-        id: 1,
-        name: "La Cocina de María",
-        location: [10.4236, -75.5518],
-        category: "Restaurante Tradicional",
-        owner: "María González",
-        indicadoresSalida: {
-          seleccionAceites: { antes: 46, actual: 71, meta: 80 },
-          usoSostenible: { antes: 80, actual: 100, meta: 100 },
-          manejoACU: { antes: 66, actual: 55, meta: 45 },
-          manejoGrasas: { antes: 55, actual: 67, meta: 75 },
-          evaluacionEconomica: { antes: 10, actual: 67, meta: 80 },
-        },
-        puntaje: { antes: 58, actual: 71 },
-        mejoras: [
-          "Implementación de sistema de filtrado avanzado",
-          "Capacitación completa del personal en manejo sostenible",
-          "Reducción del 40% en residuos generados",
-          "Certificación Bronze en sostenibilidad",
-        ],
-      },
-      {
-        id: 2,
-        name: "Pizzería Don Luigi",
-        location: [10.4242, -75.5512],
-        category: "Pizzería",
-        owner: "Luigi Rossi",
-        indicadoresSalida: {
-          seleccionAceites: { antes: 40, actual: 65, meta: 80 },
-          usoSostenible: { antes: 75, actual: 95, meta: 100 },
-          manejoACU: { antes: 70, actual: 60, meta: 50 },
-          manejoGrasas: { antes: 50, actual: 62, meta: 75 },
-          evaluacionEconomica: { antes: 8, actual: 55, meta: 80 },
-        },
-        puntaje: { antes: 52, actual: 65 },
-        mejoras: [
-          "Instalación de equipos de reciclaje",
-          "Mejora en procesos de cocción",
-          "Reducción del 35% en consumo energético",
-        ],
-      },
-      {
-        id: 3,
-        name: "Café Central",
-        location: [10.4248, -75.5525],
-        category: "Cafetería",
-        owner: "Ana Rodríguez",
-        indicadoresSalida: {
-          seleccionAceites: { antes: 35, actual: 58, meta: 80 },
-          usoSostenible: { antes: 70, actual: 88, meta: 100 },
-          manejoACU: { antes: 75, actual: 65, meta: 55 },
-          manejoGrasas: { antes: 45, actual: 55, meta: 75 },
-          evaluacionEconomica: { antes: 5, actual: 45, meta: 80 },
-        },
-        puntaje: { antes: 48, actual: 58 },
-        mejoras: [
-          "Optimización de procesos de preparación",
-          "Implementación de prácticas de ahorro energético",
-          "Mejora en la gestión de residuos orgánicos",
-        ],
-      },
-      {
-        id: 4,
-        name: "Restaurante El Dorado",
-        location: [10.423, -75.553],
-        category: "Restaurante Gourmet",
-        owner: "Carlos Mendoza",
-        indicadoresSalida: {
-          seleccionAceites: { antes: 55, actual: 85, meta: 80 },
-          usoSostenible: { antes: 85, actual: 100, meta: 80 },
-          manejoACU: { antes: 60, actual: 45, meta: 40 },
-          manejoGrasas: { antes: 65, actual: 78, meta: 75 },
-          evaluacionEconomica: { antes: 15, actual: 75, meta: 80 },
-        },
-        puntaje: { antes: 65, actual: 82 },
-        mejoras: [
-          "Certificación Gold en sostenibilidad",
-          "Implementación completa de tecnología verde",
-          "Reducción del 50% en huella de carbono",
-          "Programa de capacitación avanzada",
-        ],
-      },
-      {
-        id: 5,
-        name: "Marisquería La Perla",
-        location: [10.4255, -75.5508],
-        category: "Marisquería",
-        owner: "Roberto Silva",
-        indicadoresSalida: {
-          seleccionAceites: { antes: 42, actual: 68, meta: 80 },
-          usoSostenible: { antes: 78, actual: 92, meta: 100 },
-          manejoACU: { antes: 68, actual: 58, meta: 48 },
-          manejoGrasas: { antes: 52, actual: 64, meta: 75 },
-          evaluacionEconomica: { antes: 12, actual: 62, meta: 80 },
-        },
-        puntaje: { antes: 55, actual: 68 },
-        mejoras: [
-          "Especialización en manejo de aceites de fritura",
-          "Implementación de sistema de monitoreo continuo",
-          "Certificación Silver en sostenibilidad",
-        ],
-      },
-    ],
-    []
-  );
+  const userId = localStorage.getItem("user_id");
 
-  // Configuración de indicadores
-
-  //*Fetches
-  //Fetch user list
+  // Fetch user list
   useEffect(() => {
     const fetchUsers = async () => {
       const token = localStorage.getItem("access_token");
       try {
-        const res = await fetch("http://localhost:3000/api/v1/user", {
+        const res = await fetch(`${API_BASE_URL}/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -181,6 +59,98 @@ const RestaurantDashboard = () => {
     fetchUsers();
   }, []);
 
+  // Fetch resultados de cuestionarios del usuario
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`${API_BASE_URL}/quiz-result/user/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setUserQuizResults(data))
+      .catch(() => setUserQuizResults([]));
+  }, [userId]);
+
+  // Fetch radar data para usuario
+  useEffect(() => {
+    if (!userId) return;
+    fetch(`${API_BASE_URL}/user-answer/all-section-averages/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setRadarUserData(data))
+      .catch(() => setRadarUserData(null));
+  }, [userId]);
+
+  // Fetch puntajes totales por restaurante (y ubicación)
+  useEffect(() => {
+    if (!userId) return;
+    fetch(
+      `${API_BASE_URL}/user-educational-unit-progress/totals/by-user?userId=${userId}`
+    )
+      .then((res) => res.json())
+      .then((data) => setRestaurantTotals(data))
+      .catch(() => setRestaurantTotals([]));
+  }, [userId]);
+
+  // Fetch global average
+  useEffect(() => {
+    if (!userId) return;
+    fetch(
+      `${API_BASE_URL}/user-educational-unit-progress/global/average?userId=${userId}`
+    )
+      .then((res) => res.json())
+      .then((data) => setGlobalAverage(data.global_average))
+      .catch(() => setGlobalAverage(null));
+  }, [userId]);
+
+  // Fetch puntajes por unidad y restaurante para gráfica apilada
+  useEffect(() => {
+    if (!userId) return;
+    fetch(
+      `${API_BASE_URL}/user-educational-unit-progress/scores/by-unit-and-restaurant?userId=${userId}`
+    )
+      .then((res) => res.json())
+      .then((data) => setStackedUnitScores(data))
+      .catch(() => setStackedUnitScores([]));
+  }, [userId]);
+
+  // Extraer score inicial y final
+  const quizScores = useMemo(() => {
+    let inicial = null;
+    let final = null;
+    userQuizResults.forEach((result) => {
+      if (result.module?.type === "inicial") inicial = result.score;
+      if (result.module?.type === "final") final = result.score;
+    });
+    return { inicial, final };
+  }, [userQuizResults]);
+
+  // Procesar data para gráfica apilada
+  const stackedBarData = useMemo(() => {
+    // Agrupar por restaurante
+    const grouped = {};
+    stackedUnitScores.forEach((item) => {
+      if (!grouped[item.restaurant_name]) {
+        grouped[item.restaurant_name] = {
+          restaurant_name: item.restaurant_name,
+        };
+      }
+      grouped[item.restaurant_name][item.unit_name] = item.total_score;
+    });
+    // Convertir a array
+    return Object.values(grouped);
+  }, [stackedUnitScores]);
+
+  const unitNames = useMemo(
+    () => [...new Set(stackedUnitScores.map((item) => item.unit_name))],
+    [stackedUnitScores]
+  );
+
+  // Elimina el mock de restaurants y usa restaurantTotals para el mapa y stats
+  const restaurants = useMemo(() => {
+    return restaurantTotals.map((r) => ({
+      name: r.restaurant_name,
+      location: [r.latitude, r.longitude],
+      puntaje: { actual: r.total_score },
+    }));
+  }, [restaurantTotals]);
+
   // Funciones de utilidad
   const calculateAverage = (restaurants, path) => {
     return (
@@ -189,7 +159,7 @@ const RestaurantDashboard = () => {
           .split(".")
           .reduce((obj, key) => obj[key], restaurant);
         return acc + value;
-      }, 0) / restaurants.length
+      }, 0) / (restaurants.length || 1)
     );
   };
 
@@ -201,85 +171,40 @@ const RestaurantDashboard = () => {
   const computedData = useMemo(() => {
     const systemIndicators = {
       totalRestaurants: filteredRestaurants.length,
-      averageScoreBefore: Math.round(
-        calculateAverage(filteredRestaurants, "puntaje.antes")
-      ),
+      averageScoreBefore: 0, // Ya no se usa el mock, puedes eliminar si no lo necesitas
       averageScoreAfter: Math.round(
         calculateAverage(filteredRestaurants, "puntaje.actual")
       ),
     };
 
-    const performanceData = filteredRestaurants.map((restaurant) => ({
-      name: restaurant.name.split(" ").slice(0, 2).join(" "),
-      puntajeAntes: restaurant.puntaje.antes,
-      puntajeActual: restaurant.puntaje.actual,
-      mejora: restaurant.puntaje.actual - restaurant.puntaje.antes,
-    }));
+    // Radar y comparación siguen igual
+    let radarData = [];
+    if (radarUserData) {
+      radarData = RADAR_SECTIONS.map((section) => ({
+        indicator: section,
+        inicial: radarUserData.inicial?.[section] ?? 0,
+        final: radarUserData.final?.[section] ?? 0,
+      }));
+    } else {
+      radarData = RADAR_SECTIONS.map((section) => ({
+        indicator: section,
+        inicial: 0,
+        final: 0,
+      }));
+    }
 
-    const radarIndicators = [
-      "Selección y Adquisición de Aceites",
-      "Uso Sostenible del Aceite de Cocina",
-      "Manejo Seguro y Responsable del ACU",
-      "Manejo Seguro y Responsable de Grasas",
-      "Evaluación Económica",
-    ];
-    const keys = [
-      "seleccionAceites",
-      "usoSostenible",
-      "manejoACU",
-      "manejoGrasas",
-      "evaluacionEconomica",
-    ];
-    const radarData = radarIndicators.map((name, idx) => ({
-      indicator: name,
-      antes: calculateAverage(
-        filteredRestaurants,
-        `indicadoresSalida.${keys[idx]}.antes`
-      ),
-      actual: calculateAverage(
-        filteredRestaurants,
-        `indicadoresSalida.${keys[idx]}.actual`
-      ),
-      meta: calculateAverage(
-        filteredRestaurants,
-        `indicadoresSalida.${keys[idx]}.meta`
-      ),
+    const comparisonData = radarData.map((item) => ({
+      categoria: item.indicator,
+      antes: item.inicial,
+      actual: item.final,
     }));
-
-    const comparisonData = radarIndicators.map((name, idx) => ({
-      categoria: name,
-      antes: calculateAverage(
-        filteredRestaurants,
-        `indicadoresSalida.${keys[idx]}.antes`
-      ),
-      actual: calculateAverage(
-        filteredRestaurants,
-        `indicadoresSalida.${keys[idx]}.actual`
-      ),
-    }));
-
-    const timelineData = [
-      { mes: "Ene", promedio: 52 },
-      { mes: "Feb", promedio: 55 },
-      { mes: "Mar", promedio: 58 },
-      { mes: "Abr", promedio: 61 },
-      { mes: "May", promedio: 64 },
-      { mes: "Jun", promedio: 66 },
-      { mes: "Jul", promedio: 68 },
-      { mes: "Ago", promedio: 70 },
-      { mes: "Sep", promedio: 71 },
-      { mes: "Oct", promedio: 72 },
-      { mes: "Nov", promedio: 73 },
-    ];
 
     return {
       systemIndicators,
-      performanceData,
       radarData,
       comparisonData,
-      timelineData,
     };
-  }, [filteredRestaurants]);
+  }, [filteredRestaurants, radarUserData]);
 
   // Componentes reutilizables
   const StatCard = ({
@@ -421,9 +346,9 @@ const RestaurantDashboard = () => {
           }
         ).addTo(map);
 
-        // Agregar marcadores
-        restaurants.forEach((restaurant) => {
-          const productivity = restaurant.puntaje.actual;
+        // Agregar marcadores usando restaurantTotals
+        restaurantTotals.forEach((restaurant) => {
+          const productivity = restaurant.total_score;
           let color = "#ef4444"; // Rojo por defecto
 
           if (productivity >= 70) color = "#22c55e"; // Verde
@@ -440,40 +365,45 @@ const RestaurantDashboard = () => {
             iconAnchor: [12, 12],
           });
 
-          const marker = window.L.marker(restaurant.location, {
-            icon: customIcon,
-          }).addTo(map);
+          const marker = window.L.marker(
+            [restaurant.latitude, restaurant.longitude],
+            {
+              icon: customIcon,
+            }
+          ).addTo(map);
 
+          // Tooltip al pasar el mouse
+          marker.bindTooltip(
+            `<strong>${restaurant.restaurant_name}</strong><br/>Puntaje: ${restaurant.total_score}`,
+            {
+              direction: "top",
+              offset: [0, -10],
+              permanent: false,
+              opacity: 0.95,
+            }
+          );
+
+          // Popup al hacer click (opcional, puedes dejarlo si quieres)
           const popupContent = `
             <div style="padding: 8px; min-width: 200px;">
-              <h3 style="font-weight: bold; font-size: 16px; margin: 0 0 8px 0;">${
-                restaurant.name
-              }</h3>
-              <p style="color: #666; font-size: 14px; margin: 4px 0;">${
-                restaurant.category
-              }</p>
-              <p style="font-size: 14px; margin: 4px 0;">Propietario: ${
-                restaurant.owner
-              }</p>
+              <h3 style="font-weight: bold; font-size: 16px; margin: 0 0 8px 0;">${restaurant.restaurant_name}</h3>
               <div style="margin-top: 8px;">
                 <div style="display: flex; justify-between; font-size: 12px;">
-                  <span>Productividad:</span>
-                  <span style="font-weight: bold;">${
-                    restaurant.puntaje.actual
-                  }%</span>
-                </div>
-                <div style="display: flex; justify-between; font-size: 12px;">
-                  <span>Mejora:</span>
-                  <span style="font-weight: bold;">+${
-                    restaurant.puntaje.actual - restaurant.puntaje.antes
-                  }%</span>
+                  <span>Puntaje total:</span>
+                  <span style="font-weight: bold;">${restaurant.total_score}</span>
                 </div>
               </div>
             </div>
           `;
-
           marker.bindPopup(popupContent);
-          marker.on("click", () => setSelectedRestaurant(restaurant));
+
+          marker.on("click", () =>
+            setSelectedRestaurant({
+              name: restaurant.restaurant_name,
+              puntaje: { actual: restaurant.total_score },
+              location: [restaurant.latitude, restaurant.longitude],
+            })
+          );
         });
 
         // Cleanup function
@@ -483,7 +413,7 @@ const RestaurantDashboard = () => {
           }
         };
       }
-    }, [mapLoaded]);
+    }, [mapLoaded, restaurantTotals]);
 
     if (!mapLoaded) {
       return (
@@ -503,13 +433,6 @@ const RestaurantDashboard = () => {
     );
   };
 
-  const averageScoreBeforeGlobal = Math.round(
-    calculateAverage(restaurants, "puntaje.antes")
-  );
-  const averageScoreAfterGlobal = Math.round(
-    calculateAverage(restaurants, "puntaje.actual")
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -520,35 +443,126 @@ const RestaurantDashboard = () => {
           className="mb-8"
         >
           <h1 className="mb-2 text-3xl font-bold text-gray-900">
-            Dashboard de Indicadores de Salida
+            Dashboard Avance Retos
           </h1>
-          <p className="text-gray-600">
-            Monitoreo de indicadores de calidad, impacto ambiental, costos y
-            productividad
-          </p>
         </motion.div>
 
         {/* Indicadores Principales */}
-        <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 ">
+        <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2">
           <StatCard
             title="Restaurantes Activos"
             value={restaurants.length}
-            icon={Building}
+            icon={Star}
             color="text-blue-500"
             subtitle="En el programa"
           />
-
           <StatCard
             title="Puntaje Promedio Global"
-            value={averageScoreAfterGlobal}
-            suffix="/100"
-            icon={Star}
-            color="text-purple-500"
-            subtitle={`Antes: ${averageScoreBeforeGlobal}/100`}
+            value={
+              globalAverage !== null ? Number(globalAverage).toFixed(2) : "--"
+            }
+            icon={TrendingUp}
+            color="text-green-600"
+            subtitle="Promedio total de todos los restaurantes"
           />
         </div>
 
-        {/* Mapa Placeholder */}
+        {/* Gráfica de barras horizontales: Puntaje total por restaurante */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 mb-8 bg-white border border-gray-100 shadow-lg rounded-2xl"
+        >
+          <h2 className="mb-4 text-xl font-bold text-gray-900">
+            Puntaje total por restaurante
+          </h2>
+          <ResponsiveContainer
+            width="100%"
+            height={50 + 50 * restaurantTotals.length}
+          >
+            <BarChart
+              data={restaurantTotals}
+              layout="vertical"
+              margin={{ top: 20, right: 30, left: 10, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" domain={[0, 250]} />{" "}
+              {/* <-- Limita el eje X de 0 a 250 */}
+              <YAxis
+                dataKey="restaurant_name"
+                type="category"
+                width={180}
+                tick={{ fontSize: 12 }}
+              />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="total_score"
+                fill="#256B3E"
+                name="Puntaje total"
+                barSize={28}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        {/* Gráfica de barras apiladas: Puntajes por unidad de cada restaurante */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 mb-8 bg-white border border-gray-100 shadow-lg rounded-2xl"
+        >
+          <h2 className="mb-4 text-xl font-bold text-gray-900">
+            Puntaje por unidad y restaurante
+          </h2>
+          <ResponsiveContainer
+            width="100%"
+            height={60 + 40 * stackedBarData.length}
+          >
+            <BarChart
+              data={stackedBarData}
+              layout="vertical"
+              margin={{ top: 20, right: 30, left: 10, bottom: 20 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" domain={[0, 100]} />
+              <YAxis
+                dataKey="restaurant_name"
+                type="category"
+                width={180}
+                tick={{ fontSize: 12 }}
+              />
+              <Tooltip />
+              <Legend
+                layout="vertical"
+                align="right"
+                verticalAlign="middle"
+                wrapperStyle={{ right: -10 }}
+              />
+              {unitNames.map((unit, idx) => (
+                <Bar
+                  key={unit}
+                  dataKey={unit}
+                  stackId="a"
+                  fill={
+                    [
+                      "#256B3E",
+                      "#F4A300",
+                      "#FFD439",
+                      "#22c55e",
+                      "#ef4444",
+                      "#3b82f6",
+                    ][idx % 6]
+                  }
+                  name={unit}
+                  barSize={28}
+                />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+
+        {/* Mapa */}
         <div className="grid grid-cols-1 gap-8 mb-8 ">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -578,28 +592,43 @@ const RestaurantDashboard = () => {
           </motion.div>
         </div>
 
-        {/* Filtrar por Restaurante */}
-        <div className="flex items-center gap-4 mb-8">
-          <label
-            htmlFor="restaurant-filter"
-            className="text-sm font-medium text-gray-700"
-          >
-            Filtrar por restaurante:
-          </label>
-          <select
-            id="restaurant-filter"
-            value={restaurantFilter}
-            onChange={(e) => setRestaurantFilter(e.target.value)}
-            className="px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg"
-          >
-            <option value="">Todos</option>
-            {restaurants.map((r) => (
-              <option key={r.id} value={r.name}>
-                {r.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+          Dashboard Cuestionarios
+        </h1>
+
+        {/* Card de Puntaje Inicial y Final */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-between gap-6 p-6 mb-8 bg-white border border-gray-100 shadow-lg rounded-2xl md:flex-row"
+        >
+          <div className="flex items-center gap-4">
+            <Star className="w-10 h-10 text-yellow-400" />
+            <div>
+              <h2 className="mb-1 text-lg font-bold text-gray-900">
+                Puntaje Cuestionarios
+              </h2>
+              <p className="text-sm text-gray-600">
+                Tu progreso general en los cuestionarios
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-8 mt-4 md:mt-0">
+            <div className="flex flex-col items-center">
+              <span className="mb-1 text-xs text-gray-500">Antes</span>
+              <span className="text-3xl font-bold text-[#ef4444]">
+                {quizScores.inicial !== null ? quizScores.inicial : "--"}
+              </span>
+            </div>
+            <div className="w-8 h-0.5 bg-gray-200 rounded-full"></div>
+            <div className="flex flex-col items-center">
+              <span className="mb-1 text-xs text-gray-500">Después</span>
+              <span className="text-3xl font-bold text-[#22c55e]">
+                {quizScores.final !== null ? quizScores.final : "--"}
+              </span>
+            </div>
+          </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
           {/* Gráfico de Radar */}
@@ -609,33 +638,26 @@ const RestaurantDashboard = () => {
             className="p-6 bg-white border border-gray-100 shadow-lg rounded-2xl"
           >
             <h2 className="mb-4 text-xl font-bold text-gray-900">
-              Indicadores de Salida Promedio
+              Comparativa por sección
             </h2>
             <ResponsiveContainer width="100%" height={350}>
               <RadarChart data={computedData.radarData}>
                 <PolarGrid />
                 <PolarAngleAxis dataKey="indicator" tick={{ fontSize: 10 }} />
-                <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                <PolarRadiusAxis angle={90} domain={[0, 5]} />
                 <Radar
                   name="Antes"
-                  dataKey="antes"
+                  dataKey="inicial"
                   stroke="#ef4444"
                   fill="#ef4444"
                   fillOpacity={0.1}
                 />
                 <Radar
-                  name="Actual"
-                  dataKey="actual"
+                  name="Después"
+                  dataKey="final"
                   stroke="#22c55e"
                   fill="#22c55e"
                   fillOpacity={0.3}
-                />
-                <Radar
-                  name="Meta"
-                  dataKey="meta"
-                  stroke="#3b82f6"
-                  fill="#3b82f6"
-                  fillOpacity={0.1}
                 />
                 <Legend />
               </RadarChart>
@@ -649,7 +671,7 @@ const RestaurantDashboard = () => {
             className="p-6 bg-white border border-gray-100 shadow-lg rounded-2xl"
           >
             <h2 className="mb-4 text-xl font-bold text-gray-900">
-              Comparación Antes vs Actual
+              Puntajes promedio por sección
             </h2>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={computedData.comparisonData}>
@@ -662,7 +684,7 @@ const RestaurantDashboard = () => {
                   interval={0}
                   tick={<CustomXAxisTick />}
                 />
-                <YAxis />
+                <YAxis domain={[0, 5]} /> {/* <-- Limita el eje Y de 0 a 5 */}
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="antes" fill="#ef4444" name="Antes" />

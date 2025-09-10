@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
 const ExamForm = () => {
-  const { id, title } = useParams();
+  const { id, type } = useParams();
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -14,7 +17,7 @@ const ExamForm = () => {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/question/by-module-type/inicial")
+    fetch(`${API_BASE_URL}/question/by-module-type/${type}`)
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);
@@ -55,14 +58,11 @@ const ExamForm = () => {
         ),
       };
 
-      const res = await fetch(
-        "http://localhost:3000/api/v1/user-answer/submit",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/user-answer/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) throw new Error("Error enviando respuestas");
 
@@ -81,7 +81,7 @@ const ExamForm = () => {
   return (
     <form className="max-w-3xl px-4 py-8 mx-auto" onSubmit={handleSubmit}>
       <h1 className="text-3xl font-bold mb-8 text-[#256B3E]">
-        {title ? decodeURIComponent(title) : "Cuestionario"}
+        {type === "inicial" ? "Cuestionario Inicial" : "Cuestionario Final"}
       </h1>
       {Object.entries(grouped).map(([section, qs]) => (
         <div key={section} className="mb-10">

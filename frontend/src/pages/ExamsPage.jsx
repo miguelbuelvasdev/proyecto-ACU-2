@@ -19,6 +19,8 @@ import {
   Users,
 } from "lucide-react";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const examVisuals = {
   inicial: {
     color: "from-blue-500 to-blue-600",
@@ -38,10 +40,11 @@ const ExamsPage = () => {
   const navigate = useNavigate();
   const [exams, setExams] = useState([]);
   const [userResults, setUserResults] = useState([]);
+  const [initialCompleted, setInitialCompleted] = useState(false);
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/educational-modules")
+    fetch(`${API_BASE_URL}/api/v1/educational-modules`)
       .then((res) => res.json())
       .then((data) => {
         setExams(
@@ -61,17 +64,21 @@ const ExamsPage = () => {
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:3000/api/v1/quiz-result/user/${userId}`)
+    fetch(`${API_BASE_URL}/api/v1/quiz-result/user/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setUserResults(data);
       });
+    // Consulta si el inicial está completado para habilitar el final
+    fetch(`${API_BASE_URL}/api/v1/quiz-result/completed-initial/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setInitialCompleted(data.completed));
   }, [userId]);
 
-  // Relaciona los resultados con los exámenes
+  // Relaciona los resultados con los exámenes y controla el estado del final
   const examsWithResults = exams.map((exam) => {
     // Busca resultado por module_id (id del examen)
-    const result = userResults.find((r) => r.module.id === exam.id);
+    const result = userResults.find((r) => r.module?.id === exam.id);
 
     if (result) {
       return {
@@ -79,6 +86,22 @@ const ExamsPage = () => {
         completed: true,
         status: "completed",
         score: result.score,
+      };
+    }
+
+    // Si es el final y el inicial no está completado, bloquear
+    if (exam.type === "final" && !initialCompleted) {
+      return {
+        ...exam,
+        status: "locked",
+      };
+    }
+
+    // Si es el final y el inicial está completado, habilitar
+    if (exam.type === "final" && initialCompleted) {
+      return {
+        ...exam,
+        status: "available",
       };
     }
 
@@ -127,7 +150,7 @@ const ExamsPage = () => {
   const handleStartExam = (exam) => {
     if (exam.status === "available") {
       // Navegación específica según el tipo de examen, enviando id y title como parámetros
-      navigate(`/exam_form/${exam.id}/${encodeURIComponent(exam.title)}`);
+      navigate(`/exam_form/${exam.id}/${exam.type}`);
     }
   };
 
@@ -251,13 +274,6 @@ const ExamsPage = () => {
                   {/* Badges */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(
-                        exam.difficulty
-                      )}`}
-                    >
-                      {exam.difficulty}
-                    </span>
-                    <span
                       className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
                         exam.status
                       )}`}
@@ -266,7 +282,7 @@ const ExamsPage = () => {
                     </span>
                     {exam.score && (
                       <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#FFD439] text-[#256B3E] border border-[#F4A300]">
-                        Puntuación: {exam.score}%
+                        Puntuación: {exam.score}
                       </span>
                     )}
                   </div>
