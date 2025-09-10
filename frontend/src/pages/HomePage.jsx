@@ -44,35 +44,17 @@ const HomePage = () => {
     },
   ];
 
-  const recentResources = [
-    {
-      id: 1,
-      title: "Guía: Almacenamiento Seguro del Aceite",
-      type: "PDF",
-      new: true,
-    },
-    {
-      id: 2,
-      title: "Video: Proceso de Filtrado",
-      type: "Video",
-      new: true,
-    },
-    {
-      id: 3,
-      title: "Infografía: Impacto Ambiental",
-      type: "Imagen",
-      new: false,
-    },
-  ];
-
   //*Fetches
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
     if (!userId) return;
 
+    const API_BASE_URL =
+      import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/v1/user/${userId}`);
+        const res = await fetch(`${API_BASE_URL}/user/${userId}`);
         const data = await res.json();
         console.log("User Data:", data);
         setUserData(data);

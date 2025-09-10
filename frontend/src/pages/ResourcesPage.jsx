@@ -68,13 +68,14 @@ const MinimalResourcesPage = () => {
     },
   };
 
+  const API_BASE_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
+
   //Fetch educational units
   useEffect(() => {
     const fetchUnits = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:3000/api/v1/educational-unit"
-        );
+        const res = await fetch(`${API_BASE_URL}/educational-unit`);
         const data = await res.json();
         const coloredUnits = data.map((unit) => ({
           ...unit,
@@ -99,9 +100,7 @@ const MinimalResourcesPage = () => {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const res = await fetch(
-          "http://localhost:3000/api/v1/educational-guide"
-        );
+        const res = await fetch(`${API_BASE_URL}/educational-guide`);
         const data = await res.json();
         setResources(data);
       } catch (err) {
@@ -121,7 +120,7 @@ const MinimalResourcesPage = () => {
   const fetchUserGuideUploads = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/v1/user-guide-upload/user/${userId}`
+        `${API_BASE_URL}/user-guide-upload/user/${userId}`
       );
       const data = await res.json();
       setUserGuideUploads(data);
@@ -142,7 +141,7 @@ const MinimalResourcesPage = () => {
     const fetchUnitProgress = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/v1/user-educational-unit-progress/user/${userId}`
+          `${API_BASE_URL}/user-educational-unit-progress/user/${userId}`
         );
         const data = await res.json();
         setUnitProgress(data);
@@ -621,7 +620,7 @@ const MinimalResourcesPage = () => {
 
                       try {
                         const res = await fetch(
-                          "http://localhost:3000/api/v1/user-guide-upload/file",
+                          `${API_BASE_URL}/user-guide-upload/file`,
                           {
                             method: "POST",
                             body: formData,
@@ -629,7 +628,6 @@ const MinimalResourcesPage = () => {
                         );
                         if (res.ok) {
                           alert("Archivo subido correctamente");
-                          // Vuelve a cargar los uploads para actualizar los status
                           fetchUserGuideUploads();
                         } else {
                           alert("Error al subir el archivo");

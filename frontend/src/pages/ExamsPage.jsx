@@ -19,7 +19,8 @@ import {
   Users,
 } from "lucide-react";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
 const examVisuals = {
   inicial: {
@@ -44,7 +45,7 @@ const ExamsPage = () => {
   const userId = localStorage.getItem("user_id");
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/v1/educational-modules`)
+    fetch(`${API_BASE_URL}/educational-modules`)
       .then((res) => res.json())
       .then((data) => {
         setExams(
@@ -64,13 +65,13 @@ const ExamsPage = () => {
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`${API_BASE_URL}/api/v1/quiz-result/user/${userId}`)
+    fetch(`${API_BASE_URL}/quiz-result/user/${userId}`)
       .then((res) => res.json())
       .then((data) => {
         setUserResults(data);
       });
     // Consulta si el inicial está completado para habilitar el final
-    fetch(`${API_BASE_URL}/api/v1/quiz-result/completed-initial/${userId}`)
+    fetch(`${API_BASE_URL}/quiz-result/completed-initial/${userId}`)
       .then((res) => res.json())
       .then((data) => setInitialCompleted(data.completed));
   }, [userId]);
