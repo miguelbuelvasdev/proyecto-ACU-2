@@ -135,19 +135,6 @@ const ExamsPage = () => {
     }
   };
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case "Básico":
-        return "text-green-700 bg-green-100 border-green-200";
-      case "Intermedio":
-        return "text-yellow-700 bg-yellow-100 border-yellow-200";
-      case "Avanzado":
-        return "text-red-700 bg-red-100 border-red-200";
-      default:
-        return "text-gray-700 bg-gray-100 border-gray-200";
-    }
-  };
-
   const handleStartExam = (exam) => {
     if (exam.status === "available") {
       // Navegación específica según el tipo de examen, enviando id y title como parámetros
@@ -369,50 +356,6 @@ const ExamsPage = () => {
               </motion.div>
             ))}
           </div>
-
-          {/* Información adicional */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="p-8 text-center border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl"
-          >
-            <div className="w-16 h-16 bg-gradient-to-br from-[#256B3E] to-[#1F5D34] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <BookOpen className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-[#256B3E] mb-2">
-              Guía para Cuestionarios
-            </h3>
-            <p className="text-[#256B3E]/70 mb-6 max-w-2xl mx-auto">
-              Cada cuestionario está diseñado para medir tu comprensión y
-              aplicación práctica de los conceptos del manejo de las grasas y el
-              ACU. Asegúrate de revisar todos los materiales antes de comenzar.
-            </p>
-
-            <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-blue-100 rounded-xl">
-                  <Brain className="w-6 h-6 text-blue-600" />
-                </div>
-                <h4 className="font-semibold text-[#256B3E] mb-1">
-                  Preparación
-                </h4>
-                <p className="text-sm text-[#256B3E]/70">
-                  Estudia los materiales del curso
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 bg-yellow-100 rounded-xl">
-                  <Clock className="w-6 h-6 text-yellow-600" />
-                </div>
-                <h4 className="font-semibold text-[#256B3E] mb-1">Tiempo</h4>
-                <p className="text-sm text-[#256B3E]/70">
-                  Administra bien tu tiempo
-                </p>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </div>
     </div>

@@ -20,31 +20,10 @@ import {
 const HomePage = () => {
   //States
   const [userData, setUserData] = useState(null);
+  const [pendingExams, setPendingExams] = useState([]);
+  const [challengeProgress, setChallengeProgress] = useState(0);
   const navigate = useNavigate();
 
-  // Mock data para exámenes y estadísticas
-  const pendingExams = [
-    {
-      id: 1,
-      title: "Cuestionario Final",
-      dueDate: "2025-08-20",
-      duration: "60 min",
-      attempts: 0,
-      maxAttempts: 3,
-      difficulty: "Intermedio",
-    },
-    {
-      id: 2,
-      title: "Cuestionario Inicial",
-      dueDate: "2025-08-20",
-      duration: "60 min",
-      attempts: 0,
-      maxAttempts: 3,
-      difficulty: "Básico",
-    },
-  ];
-
-  //*Fetches
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
     if (!userId) return;
@@ -52,19 +31,87 @@ const HomePage = () => {
     const API_BASE_URL =
       import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
+    // Traer datos de usuario
     const fetchUserData = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/user/${userId}`);
         const data = await res.json();
-        console.log("User Data:", data);
         setUserData(data);
       } catch (err) {
         setUserData(null);
       }
     };
 
+    // Traer módulos de examen y resultados
+    const fetchExamsAndResults = async () => {
+      try {
+        // 1. Trae los módulos de examen (con id real)
+        const examsRes = await fetch(`${API_BASE_URL}/educational-modules`);
+        const examsData = await examsRes.json();
+
+        // 2. Trae los resultados del usuario
+        const resultsRes = await fetch(
+          `${API_BASE_URL}/quiz-result/user/${userId}`
+        );
+        const resultsData = await resultsRes.json();
+
+        // 3. Consulta si el inicial está completado
+        const initialRes = await fetch(
+          `${API_BASE_URL}/quiz-result/completed-initial/${userId}`
+        );
+        const initialData = await initialRes.json();
+        const initialCompleted = initialData.completed;
+
+        // 4. Determina los exámenes pendientes y bloquea el final si corresponde
+        const completedTypes = resultsData.map((r) => r.module?.type);
+        const pending = examsData
+          .filter((exam) => !completedTypes.includes(exam.type))
+          .map((exam) => ({
+            ...exam,
+            id: exam.id, // UUID real
+            attempts: 0,
+            status:
+              exam.type === "final" && !initialCompleted
+                ? "locked"
+                : "available",
+          }));
+
+        setPendingExams(pending);
+      } catch (err) {
+        setPendingExams([]);
+      }
+    };
+
+    // Fetch progreso de retos
+    const fetchChallengeProgress = async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/user-educational-unit-progress/user/${userId}`
+        );
+        const data = await res.json();
+        // Suma todos los progress (retos completados por unidad)
+        const retosCompletados = data.reduce(
+          (acc, unit) => acc + (unit.progress || 0),
+          0
+        );
+        // 15 retos en total (5 unidades x 3 retos cada una)
+        const porcentaje = Math.round((retosCompletados / 15) * 100);
+        setChallengeProgress(porcentaje);
+      } catch (err) {
+        setChallengeProgress(0);
+      }
+    };
+
     fetchUserData();
+    fetchExamsAndResults();
+    fetchChallengeProgress();
   }, []);
+
+  const handleStartExam = (exam) => {
+    if (exam.status === "available" || !exam.status) {
+      navigate(`/exam_form/${exam.id}/${exam.type}`);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white text-[#256B3E] overflow-x-hidden font-['Inter',sans-serif]">
@@ -139,7 +186,7 @@ const HomePage = () => {
                       className="bg-gray-50/80 rounded-xl p-6 border border-gray-200 
                                hover:border-[#F4A300]/50 hover:shadow-lg hover:shadow-[#F4A300]/10 
                                transition-all duration-300 cursor-pointer group"
-                      onClick={() => navigate(`/exam/${exam.id}`)}
+                      onClick={() => handleStartExam(exam)}
                     >
                       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <div className="flex-1">
@@ -154,35 +201,25 @@ const HomePage = () => {
                                 "es-ES"
                               )}
                             </span>
-                            <span className="flex items-center gap-2 text-[#256B3E]/60">
-                              <Clock className="w-4 h-4" />
-                              {exam.duration}
-                            </span>
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium
-                              ${
-                                exam.difficulty === "Básico"
-                                  ? "bg-green-100 text-green-700 border border-green-200"
-                                  : exam.difficulty === "Intermedio"
-                                  ? "bg-yellow-100 text-yellow-700 border border-yellow-200"
-                                  : "bg-red-100 text-red-700 border border-red-200"
-                              }`}
-                            >
-                              {exam.difficulty}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-xs text-[#256B3E]/50 bg-white px-2 py-1 rounded-md border">
-                              Intentos: {exam.attempts}/{exam.maxAttempts}
-                            </span>
                           </div>
                         </div>
                         <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="px-6 py-3 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow-lg shadow-[#FFD439]/25 hover:shadow-xl hover:shadow-[#FFD439]/40 transition-all duration-300"
+                          whileHover={{
+                            scale: exam.status !== "locked" ? 1.05 : 1,
+                          }}
+                          whileTap={{
+                            scale: exam.status !== "locked" ? 0.95 : 1,
+                          }}
+                          className={`px-6 py-3 bg-gradient-to-r from-[#FFD439] to-[#F4A300] text-white rounded-xl font-medium shadow-lg shadow-[#FFD439]/25 hover:shadow-xl hover:shadow-[#FFD439]/40 transition-all duration-300
+                            ${
+                              exam.status === "locked"
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }
+                          `}
+                          disabled={exam.status === "locked"}
                         >
-                          Iniciar
+                          {exam.status === "locked" ? "Bloqueado" : "Iniciar"}
                         </motion.button>
                       </div>
                     </motion.div>
@@ -220,17 +257,17 @@ const HomePage = () => {
                   <div className="p-6 border border-gray-200 bg-gray-50/80 rounded-xl">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-[#256B3E] font-medium">
-                        Módulos Completados
+                        Retos Completados
                       </span>
                       <span className="text-2xl font-bold bg-gradient-to-r from-[#F4A300] to-[#256B3E] bg-clip-text text-transparent">
-                        100 %
+                        {challengeProgress} %
                       </span>
                     </div>
                     <div className="w-full h-4 overflow-hidden bg-gray-200 border border-gray-300 rounded-full">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{
-                          width: `${100}%`,
+                          width: `${challengeProgress}%`,
                         }}
                         transition={{ duration: 1, delay: 0.5 }}
                         className="h-full bg-gradient-to-r from-[#FFD439] to-[#F4A300] rounded-full shadow-sm"

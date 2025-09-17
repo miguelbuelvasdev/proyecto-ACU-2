@@ -101,13 +101,6 @@ const LandingPage = () => {
     },
   ];
 
-  const navLinks = [
-    { href: "#inicio", label: "Inicio" },
-    { href: "#caracteristicas", label: "Módulos" },
-    { href: "#estadisticas", label: "Resultados" },
-    { href: "#contacto", label: "Contacto" },
-  ];
-
   return (
     <div className="min-h-screen bg-white text-[#256B3E] overflow-x-hidden font-['Inter',sans-serif]">
       {/* Futuristic Background Effects */}
@@ -135,25 +128,6 @@ const LandingPage = () => {
                 />
               </motion.div>
 
-              {/* Desktop Menu */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="items-center hidden space-x-8 lg:flex"
-              >
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    whileHover={{ y: -2 }}
-                    className="text-[#256B3E] hover:text-[#F4A300] font-medium transition-colors relative group"
-                  >
-                    {link.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FFD439] to-[#F4A300] group-hover:w-full transition-all duration-300"></span>
-                  </motion.a>
-                ))}
-              </motion.div>
-
               {/* Mobile Menu Button */}
               <div className="lg:hidden mobile-menu-container">
                 <motion.button
@@ -172,35 +146,6 @@ const LandingPage = () => {
                 </motion.button>
               </div>
             </div>
-
-            {/* Mobile Menu */}
-            <AnimatePresence>
-              {mobileMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-6 lg:hidden mobile-menu-container"
-                >
-                  <div className="p-6 border bg-gray-50/80 backdrop-blur-lg rounded-xl border-gray-200/50">
-                    <div className="flex flex-col space-y-4">
-                      {navLinks.map((link) => (
-                        <motion.a
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          whileHover={{ x: 10 }}
-                          className="text-[#256B3E] hover:text-[#F4A300] font-medium py-2 transition-colors"
-                        >
-                          {link.label}
-                        </motion.a>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
       </nav>
@@ -439,27 +384,6 @@ const LandingPage = () => {
                   <FaLinkedinIn className="w-4 h-4 text-[#256B3E] group-hover:text-white transition-colors" />
                 </div>
               </div>
-            </div>
-
-            {/* Enlaces de Plataforma */}
-            <div className="text-center md:text-left">
-              <h3 className="text-lg font-bold mb-4 text-[#256B3E]">
-                Plataforma
-              </h3>
-              <nav>
-                <ul className="space-y-3">
-                  {navLinks.map((link) => (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        className="text-[#256B3E]/70 hover:text-[#F4A300] transition-colors inline-block"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
             </div>
 
             {/* Enlaces de Recursos */}
