@@ -68,8 +68,6 @@ const Navbar = () => {
   // Items del menú de perfil
   const profileMenuItems = [
     { label: "Mi Perfil", icon: User, path: "/profile" },
-    { label: "Configuración", icon: Settings, path: "/settings" },
-    { label: "Ayuda", icon: HelpCircle, path: "/help" },
     { label: "Cerrar Sesión", icon: LogOut, action: "logout" },
   ];
 
