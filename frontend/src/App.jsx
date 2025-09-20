@@ -23,6 +23,7 @@ import ResourcesPage from "./pages/ResourcesPage";
 import Dashboard from "./pages/Dashboard";
 import ExamForm from "./pages/exams/ExamForm";
 import ExamsPage from "./pages/ExamsPage";
+import Profile from "./pages/Profile";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -173,25 +174,7 @@ function App() {
               path="/profile"
               element={
                 <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <ComingSoon pageName="Perfil" />
-                </Layout>
-              }
-            />
-
-            <Route
-              path="/settings"
-              element={
-                <Layout showHeader={false} showFooter={false} showNavbar={true}>
-                  <ComingSoon pageName="Configuración" />
-                </Layout>
-              }
-            />
-
-            <Route
-              path="/about"
-              element={
-                <Layout isAuthenticated={isAuthenticated} user={user}>
-                  <ComingSoon pageName="Acerca de" />
+                  <Profile pageName="Perfil" />
                 </Layout>
               }
             />

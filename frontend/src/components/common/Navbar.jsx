@@ -32,7 +32,7 @@ const Navbar = () => {
     if (!userId) return;
 
     const API_BASE_URL =
-      import.meta.env.VITE_API_URL || "http://localhost:3000";
+      import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
     const fetchUserData = async () => {
       try {
