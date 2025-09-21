@@ -47,16 +47,29 @@ const Navbar = () => {
     fetchUserData();
   }, []);
 
+  // Detecta el rol del usuario
+  const userRole = userData?.role;
+
   // Items del menú
   const navItems = [
     { id: "inicio", label: "Inicio", icon: Home, path: "/home" },
-    { id: "recursos", label: "Recursos", icon: BookOpen, path: "/resources" },
     {
-      id: "cuestionarios",
-      label: "Cuestionarios",
-      icon: FileQuestion,
-      path: "/exams",
+      id: "recursos",
+      label: "Recursos",
+      icon: BookOpen,
+      path: userRole === "admin" ? "/resources-admin" : "/resources",
     },
+    // Solo muestra "Cuestionarios" si NO es admin
+    ...(userRole !== "admin"
+      ? [
+          {
+            id: "cuestionarios",
+            label: "Cuestionarios",
+            icon: FileQuestion,
+            path: "/exams",
+          },
+        ]
+      : []),
     {
       id: "dashboard",
       label: "Dashboard",
@@ -100,7 +113,7 @@ const Navbar = () => {
   };
 
   const userName = userData?.name || "Usuario";
-  const userRole = getRoleLabel(userData?.role);
+  const userRoleLabel = getRoleLabel(userData?.role);
 
   return (
     <nav className="sticky top-0 z-50 border-b shadow-sm bg-white/80 backdrop-blur-xl border-gray-200/50">
@@ -169,7 +182,9 @@ const Navbar = () => {
                       <p className="text-sm font-medium text-[#256B3E]">
                         {userName}
                       </p>
-                      <p className="text-xs text-[#256B3E]/60">{userRole}</p>
+                      <p className="text-xs text-[#256B3E]/60">
+                        {userRoleLabel}
+                      </p>
                     </div>
                     {profileMenuItems.map((item) => (
                       <button

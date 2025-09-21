@@ -24,6 +24,7 @@ import Dashboard from "./pages/Dashboard";
 import ExamForm from "./pages/exams/ExamForm";
 import ExamsPage from "./pages/ExamsPage";
 import Profile from "./pages/Profile";
+import ResourcesPageAdmin from "./pages/admin/ResourcesAdminPage";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -200,6 +201,15 @@ function App() {
               element={
                 <Layout isAuthenticated={isAuthenticated} user={user}>
                   <ComingSoon pageName="404 - Página no encontrada" />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/resources-admin"
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ResourcesPageAdmin />
                 </Layout>
               }
             />
