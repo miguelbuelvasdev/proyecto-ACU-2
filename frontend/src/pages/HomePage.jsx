@@ -25,6 +25,12 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userRole = localStorage.getItem("user_role");
+    if (userRole === "admin") {
+      navigate("/resources-admin", { replace: true });
+      return;
+    }
+
     const userId = localStorage.getItem("user_id");
     if (!userId) return;
 
@@ -37,6 +43,11 @@ const HomePage = () => {
         const res = await fetch(`${API_BASE_URL}/user/${userId}`);
         const data = await res.json();
         setUserData(data);
+
+        // Redirige si es admin
+        if (data.role === "admin") {
+          navigate("/resources-admin", { replace: true });
+        }
       } catch (err) {
         setUserData(null);
       }

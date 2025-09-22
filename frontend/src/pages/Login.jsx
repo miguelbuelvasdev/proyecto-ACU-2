@@ -81,6 +81,8 @@ const Login = () => {
       // Guarda el access_token y el user_id en localStorage
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("user_id", response.data.user_id);
+      console.log("Role del usuario:", response.data);
+      localStorage.setItem("user_role", response.data.role);
 
       // Redirigir al dashboard
       navigate("/home");

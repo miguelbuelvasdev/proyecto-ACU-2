@@ -16,6 +16,7 @@ import {
   Radar,
 } from "recharts";
 import { Star, TrendingUp } from "lucide-react";
+import { Select } from "@headlessui/react"; // O usa un <select> nativo
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
@@ -36,8 +37,15 @@ const RestaurantDashboard = () => {
   const [restaurantTotals, setRestaurantTotals] = useState([]);
   const [globalAverage, setGlobalAverage] = useState(null);
   const [stackedUnitScores, setStackedUnitScores] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState("");
 
-  const userId = localStorage.getItem("user_id");
+  // Detecta si es admin
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const userId =
+    isAdmin && selectedUserId
+      ? selectedUserId
+      : localStorage.getItem("user_id");
 
   // Fetch user list
   useEffect(() => {
@@ -50,7 +58,7 @@ const RestaurantDashboard = () => {
           },
         });
         const data = await res.json();
-        setUsers(data);
+        setUsers(data.filter((u) => u.role === "restaurant_owner"));
       } catch (err) {
         setUsers([]);
         console.log("Error fetching users:", err);
@@ -142,7 +150,6 @@ const RestaurantDashboard = () => {
     [stackedUnitScores]
   );
 
-  // Elimina el mock de restaurants y usa restaurantTotals para el mapa y stats
   const restaurants = useMemo(() => {
     return restaurantTotals.map((r) => ({
       name: r.restaurant_name,
@@ -433,6 +440,50 @@ const RestaurantDashboard = () => {
     );
   };
 
+  // Cambia el userId para los fetch según el filtro
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (isAdmin && selectedUserId) {
+      fetch(`${API_BASE_URL}/quiz-result/user/${selectedUserId}`)
+        .then((res) => res.json())
+        .then((data) => setUserQuizResults(data))
+        .catch(() => setUserQuizResults([]));
+
+      fetch(
+        `${API_BASE_URL}/user-answer/all-section-averages/${selectedUserId}`
+      )
+        .then((res) => res.json())
+        .then((data) => setRadarUserData(data))
+        .catch(() => setRadarUserData(null));
+
+      fetch(
+        `${API_BASE_URL}/user-educational-unit-progress/totals/by-user?userId=${selectedUserId}`
+      )
+        .then((res) => res.json())
+        .then((data) => setRestaurantTotals(data))
+        .catch(() => setRestaurantTotals([]));
+
+      fetch(
+        `${API_BASE_URL}/user-educational-unit-progress/global/average?userId=${selectedUserId}`
+      )
+        .then((res) => res.json())
+        .then((data) => setGlobalAverage(data.global_average))
+        .catch(() => setGlobalAverage(null));
+
+      fetch(
+        `${API_BASE_URL}/user-educational-unit-progress/scores/by-unit-and-restaurant?userId=${selectedUserId}`
+      )
+        .then((res) => res.json())
+        .then((data) => setStackedUnitScores(data))
+        .catch(() => setStackedUnitScores([]));
+    }
+  }, [selectedUserId, isAdmin]);
+
+  useEffect(() => {
+    const role = localStorage.getItem("user_role");
+    setIsAdmin(role === "admin");
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -595,6 +646,27 @@ const RestaurantDashboard = () => {
         <h1 className="mb-2 text-3xl font-bold text-gray-900">
           Dashboard Cuestionarios
         </h1>
+
+        {/* Filtro para admin */}
+        {isAdmin && (
+          <div className="mb-6">
+            <label className="block mb-1 font-medium text-[#256B3E]">
+              Filtrar por restaurante
+            </label>
+            <select
+              value={selectedUserId}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              className="px-3 py-2 border rounded"
+            >
+              <option value="">Selecciona un restaurante</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.restaurant_name || user.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Card de Puntaje Inicial y Final */}
         <motion.div

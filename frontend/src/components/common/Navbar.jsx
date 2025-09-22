@@ -52,7 +52,10 @@ const Navbar = () => {
 
   // Items del menú
   const navItems = [
-    { id: "inicio", label: "Inicio", icon: Home, path: "/home" },
+    // Solo muestra "Inicio" si NO es admin
+    ...(userRole !== "admin"
+      ? [{ id: "inicio", label: "Inicio", icon: Home, path: "/home" }]
+      : []),
     {
       id: "recursos",
       label: "Recursos",
@@ -93,7 +96,7 @@ const Navbar = () => {
   // Función para acciones del perfil
   const handleProfileAction = (item) => {
     if (item.action === "logout") {
-      console.log("Cerrando sesión...");
+      localStorage.clear();
       navigate("/");
     } else {
       handleNavigation(item.path);
