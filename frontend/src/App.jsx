@@ -25,6 +25,7 @@ import ExamForm from "./pages/exams/ExamForm";
 import ExamsPage from "./pages/ExamsPage";
 import Profile from "./pages/Profile";
 import ResourcesPageAdmin from "./pages/admin/ResourcesAdminPage";
+import ExportAnswers from "./components/exams/export_answers";
 
 // Componente temporal para páginas que aún no existen
 const ComingSoon = ({ pageName }) => (
@@ -191,6 +192,15 @@ function App() {
                   user={user}
                 >
                   <ExamForm />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/admin/export-answers"
+              element={
+                <Layout showHeader={false} showFooter={false} showNavbar={true}>
+                  <ExportAnswers />
                 </Layout>
               }
             />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
@@ -23,11 +23,19 @@ import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
 import logoOVA from "../assets/logoOVA.svg";
 import marimar from "../assets/marimar.jpg";
+import logoUnisinu from "../assets/logo-unisinu-cartagena-rojo.png";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api/v1";
 
 const LandingPage = () => {
   const [scrollY, setScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [classification, setClassification] = useState("");
   const navigate = useNavigate();
+
+  const userId = localStorage.getItem("user_id");
+  const token = localStorage.getItem("access_token");
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -47,40 +55,14 @@ const LandingPage = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [mobileMenuOpen]);
 
-  const features = [
-    {
-      icon: <BookOpen className="w-12 h-12" />,
-      title: "Contenido Multimedia",
-      description:
-        "Módulos interactivos con videos, infografías y simulaciones para aprender el manejo seguro del ACU.",
-      color: "from-[#F4A300] to-[#FFD439]",
-      accent: "#F4A300",
-    },
-    {
-      icon: <Shield className="w-12 h-12" />,
-      title: "Protocolos de Seguridad",
-      description:
-        "Aprende los procedimientos de emergencia para quemaduras, incendios y derrames de aceite.",
-      color: "from-[#F4A300] to-[#FFD439]",
-      accent: "#256B3E",
-    },
-    {
-      icon: <Thermometer className="w-12 h-12" />,
-      title: "Gestión de Calidad",
-      description:
-        "Domina el punto de humo, filtrado y reconocimiento de signos de degradación del aceite.",
-      color: "from-[#F4A300] to-[#FFD439]",
-      accent: "#FFD439",
-    },
-    {
-      icon: <Award className="w-12 h-12" />,
-      title: "Certificación Digital",
-      description:
-        "Obtén tu certificado oficial al completar todos los módulos del programa educativo.",
-      color: "from-[#F4A300] to-[#FFD439]",
-      accent: "#64748B",
-    },
-  ];
+  useEffect(() => {
+    if (!userId || !token) return;
+    fetch(`${API_BASE_URL}/restaurant/by-user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setClassification(data.classification || ""));
+  }, [userId, token]);
 
   const stats = [
     {
@@ -357,6 +339,30 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Sección Institucional Unisinu */}
+      <section className="relative z-10 px-4 py-12 bg-white sm:px-6">
+        <div className="container flex flex-col items-center gap-8 mx-auto md:flex-row">
+          <img
+            src={logoUnisinu}
+            alt="Logo Universidad del Sinú Cartagena"
+            className="h-auto mb-6 w-96 md:mb-0 md:mr-8"
+          />
+          <div>
+            <h3 className="text-2xl font-bold text-[#256B3E] mb-2">
+              EcoRestaurantes
+            </h3>
+            <p className="text-[#256B3E]/80 text-lg max-w-xl">
+              Visualización de resultados de aplicación de Objeto Virtual de
+              Aprendizaje sobre el manejo de aceites y grasas en los
+              restaurantes del centro histórico la ciudad de Cartagena, es un
+              proyecto de la Universidad del Sinú, financiado por la Dirección
+              de Investigación, dirigido por la Ing. Carolina Herrera del
+              Programa de Ingeniería Industrial.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <footer className="px-4 py-16 border-t border-gray-200 sm:px-6 bg-gray-50">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-8 mb-12 md:grid-cols-4">
@@ -433,8 +439,7 @@ const LandingPage = () => {
           {/* Copyright */}
           <div className="pt-8 text-center border-t border-gray-200">
             <p className="text-[#256B3E]/50 text-sm">
-              © {new Date().getFullYear()} EcoAceite OVA. Todos los derechos
-              reservados.
+              © {new Date().getFullYear()} Desarrollado por QData SAS.
             </p>
             <div className="mt-2 text-[#256B3E]/50 text-sm">
               <a href="#" className="hover:text-[#F4A300] transition-colors">

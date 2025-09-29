@@ -484,6 +484,18 @@ const RestaurantDashboard = () => {
     setIsAdmin(role === "admin");
   }, []);
 
+  const [classification, setClassification] = useState("");
+  const token = localStorage.getItem("access_token");
+
+  useEffect(() => {
+    if (!userId || !token) return;
+    fetch(`${API_BASE_URL}/restaurant/by-user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => setClassification(data.classification || ""));
+  }, [userId, token]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -497,6 +509,18 @@ const RestaurantDashboard = () => {
             Dashboard Avance Retos
           </h1>
         </motion.div>
+
+        {/* Clasificación del restaurante */}
+        {!isAdmin && (
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-[#256B3E] mb-2">
+              Clasificación del restaurante
+            </h2>
+            <p className="text-[#256B3E]/80 text-lg">
+              {classification ? classification : "Sin clasificación registrada"}
+            </p>
+          </div>
+        )}
 
         {/* Indicadores Principales */}
         <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2">

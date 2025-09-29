@@ -62,17 +62,13 @@ const Navbar = () => {
       icon: BookOpen,
       path: userRole === "admin" ? "/resources-admin" : "/resources",
     },
-    // Solo muestra "Cuestionarios" si NO es admin
-    ...(userRole !== "admin"
-      ? [
-          {
-            id: "cuestionarios",
-            label: "Cuestionarios",
-            icon: FileQuestion,
-            path: "/exams",
-          },
-        ]
-      : []),
+    // Habilita "Cuestionarios" para todos, pero cambia la ruta para admin
+    {
+      id: "cuestionarios",
+      label: "Cuestionarios",
+      icon: FileQuestion,
+      path: userRole === "admin" ? "/admin/export-answers" : "/exams",
+    },
     {
       id: "dashboard",
       label: "Dashboard",
